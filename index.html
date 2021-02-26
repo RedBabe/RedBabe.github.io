@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: #3C3240;
+      min-height: 1000px;
+      color: #fff;
+      font-family: Overpass, sans-serif;
+    }
+
+    a {
+      text-decoration: none;
+      color: #80D4FF;
+      font-size: 18px;
+    }
+
+    a:hover {
+      color: #80D4FF;
+    }
+
+    .header-title {
+      text-align: center;
+      z-index: 1;
+    }
+
+    .container {
+      width: 500px;
+      z-index: 1;
+      margin: auto;
+    }
+
+    .section>p {
+      padding-left: 20px;
+    }
+  </style>
+</head>
+
+<body>
+  <h1 class="header-title">文章列表~</h1>
+  <div class="container">
+    <div class="section">
+      <h2>React篇</h2>
+      <p>
+        <a href="/youyuxi">鱿鱼洗和我的故事</a>
+      </p>
+      <p>
+        <a href="/youyuxi">我和鱿鱼洗的故事</a>
+      </p>
+    </div>
+    
+  </div>
+
+</body>
+<script>
+  class Ball {
+    /**
+     * @param parentNode: 父节点
+     * @param camp: 存储所有小球的数组
+     * @param params:
+     **         x: x坐标
+     **         y: y坐标
+     **         r: 半径
+     **         color = "default": 小球颜色。"default" / "random"
+     */
+    constructor(parentNode, camp, params) {
+      if (!parentNode || !camp || typeof params !== "object") {
+        throw new Error("请传递所有参数");
+      }
+      if (!(parentNode instanceof HTMLElement)) {
+        throw new Error("parentNode必须是一个DOM节点");
+      }
+      const { x, y, r, color } = params;
+      this.x = x;
+      this.y = y;
+      this.r = r;
+      this.parentNode = parentNode;
+      this.camp = camp;
+      this.id = (Math.random() * Date.now()).toString(16);
+
+      // 移动速度
+      this.dx = this._randomSpeed();
+      this.dy = this._randomSpeed();
+      // 透明度
+      this.opacity = 1;
+      // 小球颜色
+      if (color === "random") {
+        this.color = this._randomColor();
+      } else {
+        this.color = "#fff";
+      }
+      // 小球节点
+      this.dom = null;
+    }
+
+    init() {
+      this.dom = document.createElement("div");
+      this.parentNode.appendChild(this.dom);
+
+      const { style } = this.dom;
+      style.borderRadius = "50%";
+      style.position = "absolute";
+      style.backgroundColor = this.color;
+      this.fresh();
+
+      this.timer = setInterval(this.update.bind(this), 10);
+      // setTimeout(() => {
+      //   clearInterval(this.timer);
+      //   this.destroy.apply(this);
+      // }, 3000);
+    }
+
+    update() {
+      this.x += this.dx;
+      this.y += this.dy;
+      this.opacity -= 0.3 / this.r;
+      this.r -= 0.1;
+      if (this.r <= 0) {
+        clearInterval(this.timer);
+        this.destroy();
+      }
+
+      this.fresh();
+    }
+
+    fresh() {
+      const { style } = this.dom;
+      style.width = this.r + "px";
+      style.height = this.r + "px";
+      style.left = this.x + "px";
+      style.top = this.y + "px";
+      style.opacity = this.opacity;
+    }
+
+    destroy() {
+      const idx = this.camp.indexOf(this);
+      this.camp.splice(idx, 1);
+
+      this.parentNode.removeChild(this.dom);
+      delete this;
+    }
+
+    _randomInt(mi, ma) {
+      return Math.floor(Math.random() * (ma - mi + 1)) + mi;
+    }
+
+    _randomFloat(mi, ma) {
+      return Math.random() * (ma - mi) + mi;
+    }
+
+    _randomColor() {
+      let ret = "#";
+      for (let i = 0; i < 6; i++) {
+        ret += this._randomInt(0, 16).toString(16);
+      }
+      return ret;
+    }
+
+    _randomSpeed() {
+      const sign = Math.random() > 0.5 ? 1 : -1;
+      return this._randomFloat(1, 2) * sign / 2;
+    }
+
+  }
+
+  function throttle(fn, wait) {
+    let timer = null;
+    return function (args) {
+      const that = this;
+      if (timer === null) {
+        timer = setTimeout(() => {
+          fn.call(that, args);
+          timer = null;
+        }, wait);
+      }
+    }
+  }
+
+  const container = document.body;
+  const arr = [];
+
+  const RADIUS = 30;
+  const THROTTLE_DELAY = 40;
+
+  container.addEventListener("mousemove", throttle(function (e) {
+    if (e.target !== container) return;
+    const x = e.pageX;
+    const y = e.pageY;
+    if (Math.random() < 0.03) {
+      const ball = new Ball(container, arr, {
+        x: x - 80,
+        y: y - 80,
+        r: 160,
+        color: "random"
+      });
+      ball.init();
+      arr.push(ball);
+      return;
+    }
+    const ball = new Ball(container, arr, {
+      x: x - RADIUS / 2,
+      y: y - RADIUS / 2,
+      r: RADIUS
+    });
+    ball.init();
+    arr.push(ball);
+  }, THROTTLE_DELAY), true);
+
+</script>
+
+</html>
