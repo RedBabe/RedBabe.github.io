@@ -1,0 +1,1390 @@
+<!doctype html>
+<html>
+<head>
+<meta charset='UTF-8'><meta name='viewport' content='width=device-width initial-scale=1'>
+<title>performance_optimization</title><style type='text/css'>html {overflow-x: initial !important;}:root { --bg-color: #ffffff; --text-color: #333333; --select-text-bg-color: #B5D6FC; --select-text-font-color: auto; --monospace: "Lucida Console",Consolas,"Courier",monospace; --title-bar-height: 20px; }
+.mac-os-11 { --title-bar-height: 28px; }
+html { font-size: 14px; background-color: var(--bg-color); color: var(--text-color); font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+body { margin: 0px; padding: 0px; height: auto; bottom: 0px; top: 0px; left: 0px; right: 0px; font-size: 1rem; line-height: 1.42857143; overflow-x: hidden; background-image: inherit; background-size: inherit; background-attachment: inherit; background-origin: inherit; background-clip: inherit; background-color: inherit; tab-size: 4; background-position: inherit inherit; background-repeat: inherit inherit; }
+iframe { margin: auto; }
+a.url { word-break: break-all; }
+a:active, a:hover { outline: 0px; }
+.in-text-selection, ::selection { text-shadow: none; background: var(--select-text-bg-color); color: var(--select-text-font-color); }
+#write { margin: 0px auto; height: auto; width: inherit; word-break: normal; word-wrap: break-word; position: relative; white-space: normal; overflow-x: visible; padding-top: 36px; }
+#write.first-line-indent p { text-indent: 2em; }
+#write.first-line-indent li p, #write.first-line-indent p * { text-indent: 0px; }
+#write.first-line-indent li { margin-left: 2em; }
+.for-image #write { padding-left: 8px; padding-right: 8px; }
+body.typora-export { padding-left: 30px; padding-right: 30px; }
+.typora-export .footnote-line, .typora-export li, .typora-export p { white-space: pre-wrap; }
+.typora-export .task-list-item input { pointer-events: none; }
+@media screen and (max-width: 500px) { 
+  body.typora-export { padding-left: 0px; padding-right: 0px; }
+  #write { padding-left: 20px; padding-right: 20px; }
+  .CodeMirror-sizer { margin-left: 0px !important; }
+  .CodeMirror-gutters { display: none !important; }
+}
+#write li > figure:last-child { margin-bottom: 0.5rem; }
+#write ol, #write ul { position: relative; }
+img { max-width: 100%; vertical-align: middle; image-orientation: from-image; }
+button, input, select, textarea { color: inherit; font-family: inherit; font-size: inherit; font-style: inherit; font-variant-caps: inherit; font-weight: inherit; font-stretch: inherit; line-height: inherit; }
+input[type="checkbox"], input[type="radio"] { line-height: normal; padding: 0px; }
+*, ::after, ::before { box-sizing: border-box; }
+#write h1, #write h2, #write h3, #write h4, #write h5, #write h6, #write p, #write pre { width: inherit; }
+#write h1, #write h2, #write h3, #write h4, #write h5, #write h6, #write p { position: relative; }
+p { line-height: inherit; }
+h1, h2, h3, h4, h5, h6 { break-after: avoid-page; break-inside: avoid; orphans: 4; }
+p { orphans: 4; }
+h1 { font-size: 2rem; }
+h2 { font-size: 1.8rem; }
+h3 { font-size: 1.6rem; }
+h4 { font-size: 1.4rem; }
+h5 { font-size: 1.2rem; }
+h6 { font-size: 1rem; }
+.md-math-block, .md-rawblock, h1, h2, h3, h4, h5, h6, p { margin-top: 1rem; margin-bottom: 1rem; }
+.hidden { display: none; }
+.md-blockmeta { color: rgb(204, 204, 204); font-weight: 700; font-style: italic; }
+a { cursor: pointer; }
+sup.md-footnote { padding: 2px 4px; background-color: rgba(238, 238, 238, 0.7); color: rgb(85, 85, 85); border-top-left-radius: 4px; border-top-right-radius: 4px; border-bottom-right-radius: 4px; border-bottom-left-radius: 4px; cursor: pointer; }
+sup.md-footnote a, sup.md-footnote a:hover { color: inherit; text-transform: inherit; text-decoration: inherit; }
+#write input[type="checkbox"] { cursor: pointer; width: inherit; height: inherit; }
+figure { overflow-x: auto; margin: 1.2em 0px; max-width: calc(100% + 16px); padding: 0px; }
+figure > table { margin: 0px; }
+tr { break-inside: avoid; break-after: auto; }
+thead { display: table-header-group; }
+table { border-collapse: collapse; border-spacing: 0px; width: 100%; overflow: auto; break-inside: auto; text-align: left; }
+table.md-table td { min-width: 32px; }
+.CodeMirror-gutters { border-right-width: 0px; background-color: inherit; }
+.CodeMirror-linenumber { }
+.CodeMirror { text-align: left; }
+.CodeMirror-placeholder { opacity: 0.3; }
+.CodeMirror pre { padding: 0px 4px; }
+.CodeMirror-lines { padding: 0px; }
+div.hr:focus { cursor: none; }
+#write pre { white-space: pre-wrap; }
+#write.fences-no-line-wrapping pre { white-space: pre; }
+#write pre.ty-contain-cm { white-space: normal; }
+.CodeMirror-gutters { margin-right: 4px; }
+.md-fences { font-size: 0.9rem; display: block; break-inside: avoid; text-align: left; overflow: visible; white-space: pre; background-image: inherit; background-size: inherit; background-attachment: inherit; background-origin: inherit; background-clip: inherit; background-color: inherit; position: relative !important; background-position: inherit inherit; background-repeat: inherit inherit; }
+.md-diagram-panel { width: 100%; margin-top: 10px; text-align: center; padding-top: 0px; padding-bottom: 8px; overflow-x: auto; }
+#write .md-fences.mock-cm { white-space: pre-wrap; }
+.md-fences.md-fences-with-lineno { padding-left: 0px; }
+#write.fences-no-line-wrapping .md-fences.mock-cm { white-space: pre; overflow-x: auto; }
+.md-fences.mock-cm.md-fences-with-lineno { padding-left: 8px; }
+.CodeMirror-line, twitterwidget { break-inside: avoid; }
+.footnotes { opacity: 0.8; font-size: 0.9rem; margin-top: 1em; margin-bottom: 1em; }
+.footnotes + .footnotes { margin-top: 0px; }
+.md-reset { margin: 0px; padding: 0px; border: 0px; outline: 0px; vertical-align: top; text-decoration: none; text-shadow: none; float: none; position: static; width: auto; height: auto; white-space: nowrap; cursor: inherit; line-height: normal; font-weight: 400; text-align: left; box-sizing: content-box; direction: ltr; background-position: 0px 0px; background-repeat: initial initial; }
+li div { padding-top: 0px; }
+blockquote { margin: 1rem 0px; }
+li .mathjax-block, li p { margin: 0.5rem 0px; }
+li blockquote { margin: 1rem 0px; }
+li { margin: 0px; position: relative; }
+blockquote > :last-child { margin-bottom: 0px; }
+blockquote > :first-child, li > :first-child { margin-top: 0px; }
+.footnotes-area { color: rgb(136, 136, 136); margin-top: 0.714rem; padding-bottom: 0.143rem; white-space: normal; }
+#write .footnote-line { white-space: pre-wrap; }
+@media print { 
+  body, html { border: 1px solid transparent; height: 99%; break-after: avoid; break-before: avoid; font-variant-ligatures: no-common-ligatures; }
+  #write { margin-top: 0px; padding-top: 0px; border-color: transparent !important; }
+  .typora-export * { -webkit-print-color-adjust: exact; }
+  .typora-export #write { break-after: avoid; }
+  .typora-export #write::after { height: 0px; }
+  .is-mac table { break-inside: avoid; }
+}
+.footnote-line { margin-top: 0.714em; font-size: 0.7em; }
+a img, img a { cursor: pointer; }
+pre.md-meta-block { font-size: 0.8rem; min-height: 0.8rem; white-space: pre-wrap; background-color: rgb(204, 204, 204); display: block; overflow-x: hidden; background-position: initial initial; background-repeat: initial initial; }
+p > .md-image:only-child:not(.md-img-error) img, p > img:only-child { display: block; margin: auto; }
+#write.first-line-indent p > .md-image:only-child:not(.md-img-error) img { left: -2em; position: relative; }
+p > .md-image:only-child { display: inline-block; width: 100%; }
+#write .MathJax_Display { margin: 0.8em 0px 0px; }
+.md-math-block { width: 100%; }
+.md-math-block:not(:empty)::after { display: none; }
+.MathJax_ref { fill: currentcolor; }
+[contenteditable="true"]:active, [contenteditable="true"]:focus, [contenteditable="false"]:active, [contenteditable="false"]:focus { outline: 0px; box-shadow: none; }
+.md-task-list-item { position: relative; list-style-type: none; }
+.task-list-item.md-task-list-item { padding-left: 0px; }
+.md-task-list-item > input { position: absolute; top: 0px; left: 0px; margin-left: -1.2em; margin-top: calc(1em - 10px); border: none; }
+.math { font-size: 1rem; }
+.md-toc { min-height: 3.58rem; position: relative; font-size: 0.9rem; border-top-left-radius: 10px; border-top-right-radius: 10px; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px; }
+.md-toc-content { position: relative; margin-left: 0px; }
+.md-toc-content::after, .md-toc::after { display: none; }
+.md-toc-item { display: block; color: rgb(65, 131, 196); }
+.md-toc-item a { text-decoration: none; }
+.md-toc-inner:hover { text-decoration: underline; }
+.md-toc-inner { display: inline-block; cursor: pointer; }
+.md-toc-h1 .md-toc-inner { margin-left: 0px; font-weight: 700; }
+.md-toc-h2 .md-toc-inner { margin-left: 2em; }
+.md-toc-h3 .md-toc-inner { margin-left: 4em; }
+.md-toc-h4 .md-toc-inner { margin-left: 6em; }
+.md-toc-h5 .md-toc-inner { margin-left: 8em; }
+.md-toc-h6 .md-toc-inner { margin-left: 10em; }
+@media screen and (max-width: 48em) { 
+  .md-toc-h3 .md-toc-inner { margin-left: 3.5em; }
+  .md-toc-h4 .md-toc-inner { margin-left: 5em; }
+  .md-toc-h5 .md-toc-inner { margin-left: 6.5em; }
+  .md-toc-h6 .md-toc-inner { margin-left: 8em; }
+}
+a.md-toc-inner { font-size: inherit; font-style: inherit; font-weight: inherit; line-height: inherit; }
+.footnote-line a:not(.reversefootnote) { color: inherit; }
+.md-attr { display: none; }
+.md-fn-count::after { content: "."; }
+code, pre, samp, tt { font-family: var(--monospace); }
+kbd { margin: 0px 0.1em; padding: 0.1em 0.6em; font-size: 0.8em; color: rgb(36, 39, 41); background-color: rgb(255, 255, 255); border: 1px solid rgb(173, 179, 185); border-top-left-radius: 3px; border-top-right-radius: 3px; border-bottom-right-radius: 3px; border-bottom-left-radius: 3px; box-shadow: rgba(12, 13, 14, 0.2) 0px 1px 0px, rgb(255, 255, 255) 0px 0px 0px 2px inset; white-space: nowrap; vertical-align: middle; background-position: initial initial; background-repeat: initial initial; }
+.md-comment { color: rgb(162, 127, 3); opacity: 0.8; font-family: var(--monospace); }
+code { text-align: left; }
+a.md-print-anchor { white-space: pre !important; border: none !important; display: inline-block !important; position: absolute !important; width: 1px !important; right: 0px !important; outline: 0px !important; text-shadow: initial !important; background-position: 0px 0px !important; background-repeat: initial initial !important; }
+.md-inline-math .MathJax_SVG .noError { display: none !important; }
+.html-for-mac .inline-math-svg .MathJax_SVG { vertical-align: 0.2px; }
+.md-math-block .MathJax_SVG_Display { text-align: center; margin: 0px; position: relative; text-indent: 0px; max-width: none; max-height: none; min-height: 0px; min-width: 100%; width: auto; overflow-y: hidden; display: block !important; }
+.MathJax_SVG_Display, .md-inline-math .MathJax_SVG_Display { width: auto; margin: inherit; display: inline-block !important; }
+.MathJax_SVG .MJX-monospace { font-family: var(--monospace); }
+.MathJax_SVG .MJX-sans-serif { font-family: sans-serif; }
+.MathJax_SVG { display: inline; font-style: normal; font-weight: 400; line-height: normal; zoom: 90%; text-indent: 0px; text-align: left; text-transform: none; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; direction: ltr; max-width: none; max-height: none; min-width: 0px; min-height: 0px; border: 0px; padding: 0px; margin: 0px; }
+.MathJax_SVG * { transition: none; }
+.MathJax_SVG_Display svg { vertical-align: middle !important; margin-bottom: 0px !important; margin-top: 0px !important; }
+.os-windows.monocolor-emoji .md-emoji { font-family: "Segoe UI Symbol", sans-serif; }
+.md-diagram-panel > svg { max-width: 100%; }
+[lang="flow"] svg, [lang="mermaid"] svg { max-width: 100%; height: auto; }
+[lang="mermaid"] .node text { font-size: 1rem; }
+table tr th { border-bottom-width: 0px; }
+video { max-width: 100%; display: block; margin: 0px auto; }
+iframe { max-width: 100%; width: 100%; border: none; }
+.highlight td, .highlight tr { border: 0px; }
+mark { background-color: rgb(255, 255, 0); color: rgb(0, 0, 0); background-position: initial initial; background-repeat: initial initial; }
+.md-html-inline .md-plain, .md-html-inline strong, mark .md-inline-math, mark strong { color: inherit; }
+mark .md-meta { color: rgb(0, 0, 0); opacity: 0.3 !important; }
+@media print { 
+  .typora-export h1, .typora-export h2, .typora-export h3, .typora-export h4, .typora-export h5, .typora-export h6 { break-inside: avoid; }
+}
+.md-diagram-panel .messageText { stroke: none !important; }
+.md-diagram-panel .start-state { fill: var(--node-fill); }
+.md-diagram-panel .edgeLabel rect { opacity: 1 !important; }
+.md-require-zoom-fix foreignObject { font-size: var(--mermaid-font-zoom); }
+
+
+.CodeMirror { height: auto; }
+.CodeMirror.cm-s-inner { background-image: inherit; background-size: inherit; background-attachment: inherit; background-origin: inherit; background-clip: inherit; background-color: inherit; background-position: inherit inherit; background-repeat: inherit inherit; }
+.CodeMirror-scroll { overflow: auto hidden; z-index: 3; }
+.CodeMirror-gutter-filler, .CodeMirror-scrollbar-filler { background-color: rgb(255, 255, 255); }
+.CodeMirror-gutters { border-right-width: 1px; border-right-style: solid; border-right-color: rgb(221, 221, 221); background-image: inherit; background-size: inherit; background-attachment: inherit; background-origin: inherit; background-clip: inherit; background-color: inherit; white-space: nowrap; background-position: inherit inherit; background-repeat: inherit inherit; }
+.CodeMirror-linenumber { padding: 0px 3px 0px 5px; text-align: right; color: rgb(153, 153, 153); }
+.cm-s-inner .cm-keyword { color: rgb(119, 0, 136); }
+.cm-s-inner .cm-atom, .cm-s-inner.cm-atom { color: rgb(34, 17, 153); }
+.cm-s-inner .cm-number { color: rgb(17, 102, 68); }
+.cm-s-inner .cm-def { color: rgb(0, 0, 255); }
+.cm-s-inner .cm-variable { color: rgb(0, 0, 0); }
+.cm-s-inner .cm-variable-2 { color: rgb(0, 85, 170); }
+.cm-s-inner .cm-variable-3 { color: rgb(0, 136, 85); }
+.cm-s-inner .cm-string { color: rgb(170, 17, 17); }
+.cm-s-inner .cm-property { color: rgb(0, 0, 0); }
+.cm-s-inner .cm-operator { color: rgb(152, 26, 26); }
+.cm-s-inner .cm-comment, .cm-s-inner.cm-comment { color: rgb(170, 85, 0); }
+.cm-s-inner .cm-string-2 { color: rgb(255, 85, 0); }
+.cm-s-inner .cm-meta { color: rgb(85, 85, 85); }
+.cm-s-inner .cm-qualifier { color: rgb(85, 85, 85); }
+.cm-s-inner .cm-builtin { color: rgb(51, 0, 170); }
+.cm-s-inner .cm-bracket { color: rgb(153, 153, 119); }
+.cm-s-inner .cm-tag { color: rgb(17, 119, 0); }
+.cm-s-inner .cm-attribute { color: rgb(0, 0, 204); }
+.cm-s-inner .cm-header, .cm-s-inner.cm-header { color: rgb(0, 0, 255); }
+.cm-s-inner .cm-quote, .cm-s-inner.cm-quote { color: rgb(0, 153, 0); }
+.cm-s-inner .cm-hr, .cm-s-inner.cm-hr { color: rgb(153, 153, 153); }
+.cm-s-inner .cm-link, .cm-s-inner.cm-link { color: rgb(0, 0, 204); }
+.cm-negative { color: rgb(221, 68, 68); }
+.cm-positive { color: rgb(34, 153, 34); }
+.cm-header, .cm-strong { font-weight: 700; }
+.cm-del { text-decoration: line-through; }
+.cm-em { font-style: italic; }
+.cm-link { text-decoration: underline; }
+.cm-error { color: red; }
+.cm-invalidchar { color: red; }
+.cm-constant { color: rgb(38, 139, 210); }
+.cm-defined { color: rgb(181, 137, 0); }
+div.CodeMirror span.CodeMirror-matchingbracket { color: rgb(0, 255, 0); }
+div.CodeMirror span.CodeMirror-nonmatchingbracket { color: rgb(255, 34, 34); }
+.cm-s-inner .CodeMirror-activeline-background { background-image: inherit; background-size: inherit; background-attachment: inherit; background-origin: inherit; background-clip: inherit; background-color: inherit; background-position: inherit inherit; background-repeat: inherit inherit; }
+.CodeMirror { position: relative; overflow: hidden; }
+.CodeMirror-scroll { height: 100%; outline: 0px; position: relative; box-sizing: content-box; background-image: inherit; background-size: inherit; background-attachment: inherit; background-origin: inherit; background-clip: inherit; background-color: inherit; background-position: inherit inherit; background-repeat: inherit inherit; }
+.CodeMirror-sizer { position: relative; }
+.CodeMirror-gutter-filler, .CodeMirror-hscrollbar, .CodeMirror-scrollbar-filler, .CodeMirror-vscrollbar { position: absolute; z-index: 6; display: none; }
+.CodeMirror-vscrollbar { right: 0px; top: 0px; overflow: hidden; }
+.CodeMirror-hscrollbar { bottom: 0px; left: 0px; overflow: hidden; }
+.CodeMirror-scrollbar-filler { right: 0px; bottom: 0px; }
+.CodeMirror-gutter-filler { left: 0px; bottom: 0px; }
+.CodeMirror-gutters { position: absolute; left: 0px; top: 0px; padding-bottom: 30px; z-index: 3; }
+.CodeMirror-gutter { white-space: normal; height: 100%; box-sizing: content-box; padding-bottom: 30px; margin-bottom: -32px; display: inline-block; }
+.CodeMirror-gutter-wrapper { position: absolute; z-index: 4; border: none !important; background-position: 0px 0px !important; background-repeat: initial initial !important; }
+.CodeMirror-gutter-background { position: absolute; top: 0px; bottom: 0px; z-index: 4; }
+.CodeMirror-gutter-elt { position: absolute; cursor: default; z-index: 4; }
+.CodeMirror-lines { cursor: text; }
+.CodeMirror pre { border-top-left-radius: 0px; border-top-right-radius: 0px; border-bottom-right-radius: 0px; border-bottom-left-radius: 0px; border-width: 0px; font-family: inherit; font-size: inherit; margin: 0px; white-space: pre; word-wrap: normal; color: inherit; z-index: 2; position: relative; overflow: visible; background-position: 0px 0px; background-repeat: initial initial; }
+.CodeMirror-wrap pre { word-wrap: break-word; white-space: pre-wrap; word-break: normal; }
+.CodeMirror-code pre { border-right-width: 30px; border-right-style: solid; border-right-color: transparent; width: fit-content; }
+.CodeMirror-wrap .CodeMirror-code pre { border-right-style: none; width: auto; }
+.CodeMirror-linebackground { position: absolute; left: 0px; right: 0px; top: 0px; bottom: 0px; z-index: 0; }
+.CodeMirror-linewidget { position: relative; z-index: 2; overflow: auto; }
+.CodeMirror-wrap .CodeMirror-scroll { overflow-x: hidden; }
+.CodeMirror-measure { position: absolute; width: 100%; height: 0px; overflow: hidden; visibility: hidden; }
+.CodeMirror-measure pre { position: static; }
+.CodeMirror div.CodeMirror-cursor { position: absolute; visibility: hidden; border-right-style: none; width: 0px; }
+.CodeMirror div.CodeMirror-cursor { visibility: hidden; }
+.CodeMirror-focused div.CodeMirror-cursor { visibility: inherit; }
+.cm-searching { background-color: rgba(255, 255, 0, 0.4); background-position: initial initial; background-repeat: initial initial; }
+@media print { 
+  .CodeMirror div.CodeMirror-cursor { visibility: hidden; }
+}
+
+
+/* noto-sans-sc-300 - latin */
+/* noto-sans-sc-300 - latin */
+  /* noto-sans-sc-regular - latin */
+    /* noto-sans-sc-500 - latin */
+    /* noto-sans-sc-700 - latin */
+    /* noto-sans-sc-900 - latin */
+      
+
+/*** Custom fonts ***/
+@import url('file:///Users/goyave/Library/Application%20Support/abnerworks.Typora/themes/');
+
+/*** Color setting ***/
+:root {
+  --side-bar-bg-color: #183055;
+  --active-file-bg-color: #2f4566;
+  --active-file-text-color: #ffffff;
+  --active-file-border-color: #757575;
+  --active-search-item-bg-color: #23242b;
+  --item-hover-bg-color: #ececec;
+  --item-hover-text-color: #000000;
+  --control-text-color: #ddd;
+  --window-border: 1px solid #183055;
+  --code-cursor: #f0f0f0;
+}
+
+/*** Btn in search bar ***/
+#filesearch-case-option-btn,
+#filesearch-word-option-btn {
+  background: var(--side-bar-bg-color);
+}
+
+/****** #write basic ******/
+#write {
+  position: static;
+  width: 90%;
+  max-width: 700px;
+  line-height: 1.6;
+  transform: none;
+  height: auto;
+}
+
+/****** #write h1-h6 ******/
+#write h1,
+#write h2,
+#write h3,
+#write h4,
+#write h5,
+#write h6,
+#write p,
+#write pre {
+  width: auto;
+}
+
+#write h1::before,
+#write h2::before,
+#write h3::before,
+#write h4::before,
+#write h5::before,
+#write h6::before {
+  position: absolute;
+  right: calc(100% + 10px);
+  bottom: 0;
+  color: #b4b4b4;
+  font-size: 1rem;
+  font-weight: bold;
+  font-variant: 'small-caps';
+  border: 0;
+  border-radius: 0;
+  left: auto;
+  float: none;
+  padding: 0;
+}
+
+#write h1 {
+  font-size: 2.2rem;
+  font-style: normal;
+  font-weight: 800;
+  line-height: 2;
+  margin-top: 14px;
+  margin-bottom: 14px;
+}
+
+#write h1::before {
+  content: 'H1';
+  bottom: 1rem;
+}
+
+#write h2 {
+  font-size: 2rem;
+  font-weight: 800;
+  font-style: normal;
+  line-height: 2;
+  margin-top: 14px;
+  margin-bottom: 14px;
+}
+
+#write h2::before {
+  content: 'H2';
+  bottom: .85rem;
+}
+
+#write h3 {
+  font-size: 1.6rem;
+  font-weight: 800;
+  line-height: 2;
+  font-style: normal;
+  margin-top: 14px;
+  margin-bottom: 14px;
+}
+
+#write h3::before {
+  content: 'H3';
+  top: .44rem;
+  padding: 3px 0 3px 0;
+}
+
+#write h4 {
+  font-size: 1.4rem;
+  font-weight: 800;
+  line-height: 2;
+  font-style: normal;
+  margin-top: 14px;
+  margin-bottom: 14px;
+}
+
+#write h4::before {
+  content: 'H4';
+  top: .4rem;
+}
+
+#write h5,
+#write h6 {
+  font-size: 1.2rem;
+  font-weight: 800;
+  line-height: 2;
+  font-style: normal;
+  margin-top: 14px;
+  margin-bottom: 14px;
+}
+
+#write h5::before,
+#write h6::before {
+  top: .2rem;
+}
+
+#write h5::before {
+  content: 'H5';
+}
+
+#write h6::before {
+  content: 'H6';
+}
+
+h3.md-focus:before,
+h4.md-focus:before,
+h5.md-focus:before,
+h6.md-focus:before {
+  color: #ddd;
+  color: var(--heading-char-color);
+  border: 1px solid;
+  border-radius: 3px;
+  position: absolute;
+  left: -1.642857143rem;
+  top: .357142857rem;
+  float: left;
+  font-size: 9px;
+  padding-left: 2px;
+  padding-right: 2px;
+  vertical-align: bottom;
+  font-weight: 400;
+  line-height: 2;
+}
+
+/****** Global Style ******/
+body {
+  margin: 0;
+  font-family: 'Glow Sans SC', -apple-system, sans-serif;
+  font-weight: 500;
+  text-rendering: geometricPrecision;
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-size-adjust: 100%
+}
+
+html,
+body {
+  color: #242A31;
+  /* width: 100%; */
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-size: 14px;
+  background: #ffffff;
+  box-sizing: border-box;
+  line-height: 1rem;
+  text-size-adjust: 100%;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+
+hr {
+  border-color: #e6ecf1;
+  height: 2px;
+  border-top: 2px solid #e6ecf1;
+}
+
+img {
+  max-width: 80%;
+  margin-top: 0.2rem;
+  margin-bottom: 0.2rem;
+}
+
+/****** ul ol Style ******/
+
+ul>li>ul>li {
+  list-style-type: circle;
+}
+
+ul>li>ul>li>ul>li {
+  list-style-type: square;
+}
+
+ol,
+ul {
+  padding-left: 2rem;
+  line-height: 1;
+}
+
+ol>li {
+  list-style-type: decimal
+}
+
+ol>li>ol>li {
+  list-style-type: lower-alpha
+}
+
+ol>li>ol>li>ol>li {
+  list-style-type: lower-roman
+}
+
+/****** Table Style ******/
+
+table {
+  padding: 0;
+  word-break: initial;
+}
+
+table tr {
+  border-top: 1px solid #dfe2e5;
+  margin: 0;
+  padding: 0;
+}
+
+table tr:nth-child(2n),
+thead {
+  background-color: #f5f7f9;
+}
+
+table tr th {
+  font-weight: bold;
+  border: 1px solid #dfe2e5;
+  border-bottom: 0;
+  margin: 0;
+  padding: 6px 13px;
+}
+
+table tr td {
+  border: 1px solid #dfe2e5;
+  margin: 0;
+  padding: 6px 13px;
+}
+
+table tr th:first-child,
+table tr td:first-child {
+  margin-top: 0;
+}
+
+table tr th:last-child,
+table tr td:last-child {
+  margin-bottom: 0;
+}
+
+
+/****** YAML Style ******/
+pre.md-meta-block {
+  font-size: .85rem !important;
+  color: #5d5d5d;
+  min-height: .8rem;
+  white-space: pre-wrap;
+  background: #f5f7f9;
+  display: block;
+  overflow-x: hidden;
+  padding: 1rem;
+  border-radius: 8px;
+}
+
+
+
+/****** Global Text ******/
+p {
+  font-size: 16px;
+  font-family: "Glow Sans SC", -apple-system, sans-serif;
+  font-weight: 500;
+  line-height: 1.6;
+  font-style: normal;
+  color: rgb(59, 69, 78);
+}
+
+a {
+  /* color: rgb(164, 78, 237); */
+  color: rgb(56, 132, 254);
+  font-weight: 500;
+  text-decoration: none;
+  text-decoration-style: none;
+  cursor: pointer;
+  padding: 0 3px 0 3px;
+}
+
+#write a:hover {
+  color: rgb(56, 132, 254);
+  text-decoration: underline;
+  text-decoration-style: solid;
+}
+
+strong {
+  font-weight: 700;
+}
+
+mark {
+  background: #87CEFA;
+  padding: 0 2px 0 2px;
+  margin: 0 2px 0 2px;
+}
+
+h1 {
+  font-size: 2rem;
+  font-style: normal;
+  font-weight: 800;
+  line-height: 2;
+  margin-top: 14px;
+  margin-bottom: 14px;
+}
+
+h2 {
+  font-size: 1.8rem;
+  font-weight: 800;
+  font-style: normal;
+  line-height: 2;
+  margin-top: 14px;
+  margin-bottom: 14px;
+}
+
+h3 {
+  font-size: 1.6rem;
+  font-weight: 800;
+  line-height: 2;
+  font-style: normal;
+  margin-top: 14px;
+  margin-bottom: 14px;
+}
+
+h4 {
+  font-size: 1.2rem;
+  font-weight: 800;
+  line-height: 2;
+  font-style: normal;
+  margin-top: 14px;
+  margin-bottom: 14px;
+}
+
+h5,
+h6 {
+  font-size: 1rem;
+  font-weight: 800;
+  line-height: 2;
+  font-style: normal;
+  margin-top: 14px;
+  margin-bottom: 14px;
+}
+
+
+/****** Print header ******/
+@media print {
+  .typora-export * {
+    -webkit-print-color-adjust: exact;
+  }
+
+  #write h1::before {
+    content: '';
+    bottom: 1rem;
+  }
+
+  #write h2::before {
+    content: '';
+    bottom: 1rem;
+  }
+
+  #write h3::before {
+    content: '';
+    bottom: 1rem;
+  }
+
+  #write h4::before {
+    content: '';
+    bottom: 1rem;
+  }
+
+  #write h5::before {
+    content: '';
+    bottom: 1rem;
+  }
+
+  #write h6::before {
+    content: '';
+    bottom: 1rem;
+  }
+
+
+}
+
+
+/****** #write Code Fences ******/
+#write .md-fences {
+  -webkit-font-smoothing: initial;
+  margin: 1rem 0 1rem 0 !important;
+  line-height: 1.43rem;
+  border-radius: 3px;
+  font-size: 0.95rem;
+  word-wrap: normal;
+}
+
+
+#write .CodeMirror-wrap .CodeMirror-code pre {
+  padding-left: 30px;
+  line-height: 1.55rem;
+}
+
+#write .CodeMirror-cursors .CodeMirror-cursor {
+  border-left: 2px solid var(--code-cursor);
+}
+
+#write code,
+tt {
+  margin: 0 2px;
+  padding: 4px 6px;
+  border-radius: 6px;
+  font-size: 0.92rem !important;
+  background: #f5f7f9;
+  display: inline;
+  vertical-align: bottom;
+  line-height: 1.8;
+}
+
+#write .md-footnote {
+  color: var(--main-5);
+  background-color: var(--main-1);
+}
+
+.cm-s-inner.CodeMirror,
+.cm-s-inner .CodeMirror-gutters {
+  padding: 0.75rem 0.15rem 0.75rem 0.15rem;
+  background-color: #183055 !important;
+  color: #f8f8f2 !important;
+  border: none;
+  border-radius: 6px;
+}
+
+
+.code-tooltip {
+  box-shadow: 0 1px 1px 0 rgba(0, 28, 36, .3);
+  border-top: 1px solid #eef2f2;
+  background: #183055;
+  border-radius: 6px;
+}
+
+.md-fences {
+  font-size: .9rem;
+  position: relative !important;
+  display: block;
+  page-break-inside: avoid;
+  text-align: left;
+  overflow: visible;
+  white-space: pre;
+  background: inherit;
+}
+
+.md-fences {
+  background-color: #f8f8f8;
+  margin-bottom: 15px;
+  margin-top: 15px;
+  padding-top: 8px;
+  padding-bottom: 6px;
+}
+
+.md-fences,
+tt {
+  border-radius: 3px;
+  /* color: #f0f0f0; */
+  padding: 0;
+  font-size: 0.9rem;
+}
+
+/****** Sidebar ******/
+#typora-sidebar * {
+  color: #f0f0f0;
+}
+
+#typora-sidebar .file-tree-node.file-library-file-node.active .file-node-background {
+  border-left: 5px solid #3884ff;
+  height: 2.2rem;
+}
+
+#sidebar-files-menu {
+  border: 1px solid rgba(0, 2, 3, 0.7);
+}
+
+.file-list-item {
+  border-bottom: var(--window-border);
+}
+
+.file-list-item {
+  overflow: hidden;
+  padding: 12px;
+  border-bottom: 1px solid #eee;
+  border-bottom: var(--window-border);
+  cursor: pointer;
+  padding-right: 8px;
+  padding-top: 12px;
+  padding-left: 24px;
+  transition: top .5s;
+  -webkit-transition: top .5s;
+}
+
+.file-list-item.active {
+  background: #2f4566;
+  /* background: var(--active-file-bg-color); */
+  color: var(--active-file-text-color);
+  border-radius: 12px;
+}
+
+.file-list-item:not(.active) {
+  opacity: .9;
+}
+
+.file-node-content {
+  padding-top: 6px;
+  margin: 0 0 8px 0;
+  cursor: default;
+  color: var(--control-text-color);
+  white-space: nowrap;
+  height: 2.2rem;
+  line-height: 1.5;
+}
+
+.ty-on-drag-enter {
+  background-color: #2f4566;
+  color: var(--item-hover-text-color);
+}
+
+.file-node-content:active {
+  border-radius: 0px !important;
+  background: #2f4566;
+}
+
+.active .file-node-content {
+  font-weight: bold;
+}
+
+.file-node-content:hover {
+  cursor: pointer;
+  border-radius: 0px !important;
+}
+
+.file-node-icon,
+.file-node-open-state {
+  display: block;
+  float: left;
+  line-height: 1.5;
+  min-height: 15px;
+}
+
+.file-node-icon {
+  margin-right: 6px;
+}
+
+.file-list-item-file-name {
+  font-weight: 700;
+  margin-bottom: 3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+  line-height: 2;
+}
+
+.sidebar-footer {
+  background: var(--side-bar-bg-color);
+  border-top: 1px #555 solid;
+}
+
+.html-for-mac #file-library-search-input {
+  border: 0;
+  border-bottom: 1px solid #ccc;
+  line-height: 16px;
+  margin: 5px 16px 0px 0;
+  width: 0;
+  /* -webkit-flex: 1; */
+  flex: 1;
+  background: 0 0;
+  color: #bbc0ca !important;
+  /* transform: translateY(-3px); */
+  /* overflow: auto; */
+  padding-top: 6px;
+}
+
+#typora-sidebar #ty-sidebar-footer .sidebar-footer-item:hover {
+  background: #021d43;
+}
+
+#typora-sidebar #outline-content .outline-item:hover {
+  background: #202020;
+}
+
+#typora-sidebar #ty-sidebar-footer #sidebar-files-menu .show+.menuitem-group-label.show {
+  border-color: #202020;
+}
+
+#typora-sidebar #ty-sidebar-footer {
+  border-top: 1px solid #19191c;
+}
+
+#typora-sidebar #ty-sidebar-footer #sidebar-files-menu li>a:hover {
+  background: #021d43;
+}
+
+#typora-sidebar #ty-sidebar-footer #sidebar-files-menu .ty-side-sort-btn.active,
+#typora-sidebar #ty-sidebar-footer #sidebar-files-menu .ty-side-sort-btn:hover {
+  color: #3884FF;
+}
+
+#typora-sidebar #ty-sidebar-footer #sidebar-files-menu .ty-side-sort-btn.active {
+  background: #001129;
+}
+
+#typora-sidebar .file-list-item.file-library-node:not(.active):hover {
+  background: #243959;
+  border-radius: 12px;
+}
+
+#typora-sidebar .file-tree-node.file-library-file-node:not(.active):hover .file-node-background {
+  background: #243959;
+  border-radius: 12px;
+  height: 2.2rem;
+}
+
+/****** Quote style ******/
+blockquote {
+  position: relative;
+  /*  margin: 1rem 1 1rem 2rem; */
+  padding: 1rem;
+  color: #827676;
+  background-color: #f5f7f9;
+  border-radius: 6px;
+  line-height: 1;
+}
+
+blockquote::before {
+  content: '';
+  position: absolute;
+  top: 0rem;
+  left: 0rem;
+  height: 100%;
+  width: .30rem;
+  background: #3884ff;
+  border-top-left-radius: 6px;
+  border-bottom-left-radius: 6px;
+}
+
+/****** task list style ******/
+.task-list {
+  padding-left: 0;
+}
+
+.md-task-list-item>input {
+  top: -0.2rem;
+  margin-left: -1.6rem;
+  margin-top: calc(1rem + 1px);
+  -webkit-appearance: initial;
+}
+
+.md-task-list-item>input:before {
+  border: 1px solid#0185ff;
+  border-radius: 1rem;
+  width: 1rem;
+  height: 1rem;
+  background: #fff;
+  content: ' ';
+  transition: background-color 200ms ease-in-out;
+  display: block;
+}
+
+.md-task-list-item>input:checked:before,
+.md-task-list-item>input[checked]:before {
+  background: #0185ff;
+  border-width: 1px;
+  transition: background-color 200ms ease-in-out;
+}
+
+.md-task-list-item>input:checked:after,
+.md-task-list-item>input[checked]:after {
+  opacity: 1;
+}
+
+.md-task-list-item>input:after {
+  opacity: 1;
+  -webkit-transition: opacity 0.05s ease-in-out;
+  -moz-transition: opacity 0.05s ease-in-out;
+  transition: opacity 0.05s ease-in-out;
+  -webkit-transform: rotate(-45deg);
+  -moz-transform: rotate(-45deg);
+  transform: rotate(-45deg);
+  position: absolute;
+  top: 0.25rem;
+  left: 0.19rem;
+  width: 0.6rem;
+  height: 0.375rem;
+  border: 2px solid #fff;
+  border-top: 0;
+  border-right: 0;
+  content: ' ';
+  opacity: 0;
+}
+
+/****** Source style ******/
+.typora-sourceview-on #write {
+  display: none
+}
+
+#typora-source {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: inherit;
+  padding-right: 0;
+  padding-left: 0;
+  padding-top: 0;
+  display: none;
+  line-height: 1.5
+}
+
+.mac-seamless-mode #typora-source {
+  top: 20px
+}
+
+#typora-source .CodeMirror {
+  height: 100%;
+  overflow-x: hidden
+}
+
+#typora-source .CodeMirror-gutters {
+  left: initial !important
+}
+
+#typora-source .CodeMirror-lines {
+  padding-top: 30px;
+  padding-bottom: 60px;
+  padding-left: 60px;
+  padding-right: 30px;
+  max-width: 800px;
+  margin: 0 auto
+}
+
+#typora-source .CodeMirror-wrap .CodeMirror-scroll {
+  overflow-y: auto
+}
+
+.CodeMirror-activeline .cm-trailing-space-new-line:after {
+  opacity: .6
+}
+
+.CodeMirror-activeline .cm-starttab .cm-tab:after {
+  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAMCAYAAAAkuj5RAAAAAXNSR0IArs4c6QAAAGFJREFUSMft1LsRQFAQheHPowAKoACx3IgEKtaEHujDjORSgWTH/ZOdnZOcM/sgk/kFFWY0qV8foQwS4MKBCS3qR6ixBJvElOobYAtivseIE120FaowJPN75GMu8j/LfMwNjh4HUpwg4LUAAAAASUVORK5CYII=);
+  background-position: right;
+  background-repeat: no-repeat;
+  width: 100%;
+  opacity: 1
+}
+
+.CodeMirror-activeline .cm-startspace:after,
+.CodeMirror-activeline .cm-trailing-space-new-line:after {
+  opacity: .2
+}
+
+.cm-s-inner .CodeMirror-vscrollbar {
+  display: none !important
+}
+
+#typora-source .CodeMirror-gutter-wrapper {
+  position: absolute !important;
+  left: -6ch !important;
+  min-width: 4ch !important;
+  text-align: right;
+  font-family: monospace;
+  font-size: .8rem;
+  margin-top: .1rem;
+  display: inline-block;
+  opacity: .6
+}
+
+#typora-source .CodeMirror-linenumber {
+  width: auto !important;
+  visibility: hidden
+}
+
+#typora-source .CodeMirror-sizer {
+  margin-left: 0 !important
+}
+
+#typora-source .CodeMirror-gutter {
+  min-width: 4ch !important
+}
+
+#typora-source .CodeMirror-activeline .CodeMirror-linenumber,
+#typora-source .CodeMirror-linenumber.CodeMirror-linenumber-show {
+  visibility: visible
+}
+
+#typora-source .CodeMirror-code>.CodeMirror-activeline::before,
+#typora-source .CodeMirror-code>:first-child::before,
+#typora-source .CodeMirror-code>:last-child::before,
+#typora-source .CodeMirror-code>:nth-child(10n)::before {
+  visibility: visible
+}
+
+.cm-s-typora-default .cm-header1:not(.cm-atom):not(.cm-s-inner) {
+  font-size: 2.2rem;
+}
+
+.cm-s-typora-default .cm-header2:not(.cm-atom):not(.cm-s-inner) {
+  font-size: 2rem;
+}
+
+.cm-s-typora-default .cm-header3:not(.cm-atom):not(.cm-s-inner) {
+  font-size: 1.6rem;
+}
+
+.cm-s-typora-default .cm-header4:not(.cm-atom):not(.cm-s-inner) {
+  font-size: 1.4rem;
+}
+
+.cm-s-typora-default .cm-header5:not(.cm-atom):not(.cm-s-inner) {
+  font-size: 1.2rem;
+}
+
+.cm-s-typora-default .cm-header6:not(.cm-atom):not(.cm-s-inner) {
+  font-size: 1.2rem;
+}
+
+.cm-s-typora-default .cm-header,
+.cm-s-typora-default .cm-property {
+  color: #183055 !important;
+}
+
+pre.CodeMirror-line {
+  page-break-inside: avoid;
+}
+
+/****** Code style ******/
+code {
+  font-size: .9rem;
+  /*   color: #333333; /*  #537AA2;  
+      border: 1px solid #d0d0d0;  */
+  font-family: 'Cascadia Code', Consolas, 'Noto Sans SC', 'Courier New', monospace;
+  padding: .2rem .2rem;
+  border-radius: 3px;
+  background: #f5f7f9 !important;
+  display: inline;
+  vertical-align: bottom;
+  line-height: 1.8;
+}
+
+code,
+pre {
+  font-size: 95% !important;
+  font-weight: bold;
+  font-family: 'Cascadia Code', Consolas, 'Noto Sans SC', 'Courier New', monospace;
+  -webkit-font-smoothing: initial;
+  -moz-osx-font-smoothing: initial
+}
+
+/****** The flow chart ******/
+pre.md-fences[lang=sequence].md-focus .md-diagram-panel,
+pre.md-fences[lang=flow].md-focus .md-diagram-panel,
+pre.md-fences[lang=mermaid].md-focus .md-diagram-panel {
+  position: -webkit-sticky;
+  border: 1px solid #777;
+  border-radius: 6px;
+  margin-top: 6px;
+}
+
+.code-tooltip .ty-input,
+.code-tooltip input {
+  background-color: transparent;
+  border: 0;
+  margin-top: 2px;
+  margin-bottom: 2px;
+  margin-left: 0;
+  margin-right: 0;
+  border-radius: 3px;
+  text-align: center;
+  min-width: 140px;
+  display: inline-block;
+  padding: 0 4px;
+  line-height: 1.5;
+  color: #fff;
+}
+
+.enable-diagrams pre.md-fences[lang=sequence] .code-tooltip,
+.enable-diagrams pre.md-fences[lang=flow] .code-tooltip,
+.enable-diagrams pre.md-fences[lang=mermaid] .code-tooltip {
+  right: 8px;
+  bottom: -2.2em;
+}
+
+/****** Windows contral ******/
+.megamenu-menu-list li a.active,
+.megamenu-menu-list:not(.saved) li a:hover {
+  background-color: #285e8e;
+}
+
+/****** Fix ******/
+.md-tab {
+  display: inline-block;
+  white-space: pre;
+  font-family: initial;
+}
+
+div.md-mathjax-preview.mathjax-candidate.mathjax-candidate-show {
+  background-color: white !important;
+  -webkit-user-modify: read-only;
+}
+
+.mathjax-candidate {
+  text-align: center;
+  padding-top: inherit;
+  overflow-x: auto;
+  padding: 10px 0;
+  background-color: white;
+}
+
+input {
+  font-weight: bold;
+  background-color: inherit;
+  background-color: var(--bg-color);
+  color: var(--text-color) !important;
+}
+
+#write input {
+  transform: translateY(-6.5px);
+}
+
+.task-list {
+  padding-left: 0;
+}
+
+.md-task-list-item>input {
+  top: -0.2rem;
+  margin-left: -1.6rem;
+  margin-top: calc(1rem + 1px);
+}
+
+.auto-suggest-container li {
+  padding: 1px;
+  padding-left: 10px;
+  padding-right: 10px;
+  cursor: pointer;
+  -webkit-user-select: none;
+  user-select: none;
+  min-width: 124px;
+  position: relative;
+  line-height: 1.4;
+}
+
+.auto-suggest-container {
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  box-shadow: 0 0 1px rgba(0, 0, 0, .1);
+  position: fixed;
+  background-color: #fff;
+  background-color: var(--bg-color);
+  z-index: 10;
+  font-size: .9rem;
+  display: none;
+  padding: 4px 6px 4px 6px;
+  line-height: 20px;
+}
+
+/****** Code highlight ******/
+.cm-s-inner .CodeMirror-guttermarker,
+.cm-s-inner .CodeMirror-guttermarker-subtle,
+.cm-s-inner .CodeMirror-linenumber {
+  color: #596774;
+}
+
+.cm-s-inner .CodeMirror-cursor {
+  border-left: 1px solid #f8f8f0;
+}
+
+.cm-s-inner div.CodeMirror-selected {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.cm-s-inner.CodeMirror-focused div.CodeMirror-selected {
+  background: rgba(255, 255, 255, 0.10);
+}
+
+.cm-s-inner .CodeMirror-line::selection,
+.cm-s-inner .CodeMirror-line>span::selection,
+.cm-s-inner .CodeMirror-line>span>span::selection {
+  background: rgba(255, 255, 255, 0.10);
+}
+
+.cm-s-inner .CodeMirror-line::-moz-selection,
+.cm-s-inner .CodeMirror-line>span::-moz-selection,
+.cm-s-inner .CodeMirror-line>span>span::-moz-selection {
+  background: rgba(255, 255, 255, 0.10);
+}
+
+.cm-s-inner .CodeMirror-activeline-background {
+  background: rgba(0, 0, 0, 0);
+}
+
+.cm-s-inner .cm-keyword {
+  color: rgba(199, 146, 234, 1);
+}
+
+.cm-s-inner .cm-operator {
+  color: rgba(233, 237, 237, 1);
+}
+
+.cm-s-inner .cm-variable-2 {
+  color: #80CBC4;
+}
+
+.cm-s-inner .cm-variable-3 {
+  color: #82B1FF;
+}
+
+.cm-s-inner .cm-builtin {
+  color: #DECB6B;
+}
+
+.cm-s-inner .cm-atom {
+  color: #F77669;
+}
+
+.cm-s-inner .cm-number {
+  color: #F77669;
+}
+
+.cm-s-inner .cm-def {
+  color: rgba(233, 237, 237, 1);
+}
+
+.cm-s-inner .cm-string {
+  color: #C3E88D;
+}
+
+.cm-s-inner .cm-string-2 {
+  color: #80CBC4;
+}
+
+.cm-s-inner .cm-comment {
+  color: #aebcc2;
+}
+
+.cm-s-inner .cm-variable {
+  color: #82B1FF;
+}
+
+.cm-s-inner .cm-tag {
+  color: #80CBC4;
+}
+
+.cm-s-inner .cm-meta {
+  color: #80CBC4;
+}
+
+.cm-s-inner .cm-attribute {
+  color: #FFCB6B;
+}
+
+.cm-s-inner .cm-property {
+  color: #80CBAE;
+}
+
+.cm-s-inner .cm-qualifier {
+  color: #DECB6B;
+}
+
+.cm-s-inner .cm-variable-3 {
+  color: #DECB6B;
+}
+
+.cm-s-inner .cm-tag {
+  color: rgba(255, 83, 112, 1);
+}
+
+.cm-s-inner .cm-error {
+  color: rgba(255, 255, 255, 1.0);
+  background-color: #EC5F67;
+}
+
+.cm-s-inner .CodeMirror-matchingbracket {
+  text-decoration: underline;
+  color: white !important;
+}
+
+.cm-s-inner .cm-header,
+.cm-s-inner.cm-header {
+  color: #334EEA;
+}
+
+.md-fences .code-tooltip {
+  background-color: #263238;
+}
+
+
+ :root {--mermaid-font-zoom:1em ;} 
+</style>
+</head>
+<body class='typora-export'>
+<div id='write'  class=''><h2><a name="1-开始" class="md-header-anchor"></a><span>1. 开始</span></h2><p><span>-</span></p><h2><a name="2-性能优化的指标和工具" class="md-header-anchor"></a><span>2. 性能优化的指标和工具</span></h2><h3><a name="chrome-devtools" class="md-header-anchor"></a><span>Chrome DevTools</span></h3><h4><a name="network-panel" class="md-header-anchor"></a><span>Network panel</span></h4><p><span>在Chrome的Network面板，可以看到waterfall(瀑布图)，上面会打印资源的加载信息：</span></p><pre spellcheck="false" class="md-fences md-end-block ty-contain-cm modeLoaded" lang="t"><div class="CodeMirror cm-s-inner CodeMirror-wrap" lang="t"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 10.5px; left: 32.09375px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: none;"></textarea></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; margin-bottom: 0px; border-right-width: 0px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div role="presentation" style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code" role="presentation" style=""><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><div class="CodeMirror-gutter-background CodeMirror-activeline-gutter" style="left: 0px; width: 0px;"></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"># CONNECTION START</span></pre></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">Queued: 资源排队时间</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">DNS Lookup: DNS查找，就是由域名查找到IP</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">Initial connection: TCP建立连接</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">SSL: https请求的SSL协商</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"># REQUEST/RESPONSE</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">Request sent: 发送请求的时间</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">Waiting(TTFB): 请求发出到请求返回（在这个期间，页面是白屏）</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">Content Download: 内容下载时间</span></pre></div></div></div></div></div><div style="position: absolute; height: 0px; width: 1px; border-bottom-width: 0px; border-bottom-style: solid; border-bottom-color: transparent; top: 210px;"></div><div class="CodeMirror-gutters" style="display: none; height: 210px;"></div></div></div></pre><p><span>Network中，</span><strong><span>蓝线</span></strong><span>是DOM加载完成的时间，</span><strong><span>红线</span></strong><span>是页面资源加载完成的时间</span></p><blockquote><p><span>可以通过</span><code>Save all as HAR with content</code><span>来保存Network面板信息为</span><code>har</code><span>文件。</span></p></blockquote><h4><a name="lighthouse" class="md-header-anchor"></a><span>Lighthouse</span></h4><p><span>-</span></p><blockquote><p><strong><span>lighthouse也可以通过npm安装使用</span></strong><span>，npm i -g lighthouse</span></p></blockquote><h4><a name="其他" class="md-header-anchor"></a><span>其他</span></h4><p><span>异步请求要快，多快呢？</span><strong><span>1s以内</span></strong></p><p><code>command + shift + p</code><span>：搜索</span><em><span>frame</span></em><span>，找到</span><code>show frames per second (FPS) meter</code><span>，查看页面的FPS</span></p><p><span>搜索</span><code>block</code><span>，找到</span><code>show request blocking</code><span>，可以阻止指定的文件加载(可以用正则)</span></p><h3><a name="rail模型页面的理想优化结果" class="md-header-anchor"></a><span>RAIL模型(页面的理想优化结果)</span></h3><blockquote><p><span>Response(页面对用户的响应): 处理事件要在50ms以内完成</span></p><p><span>Animation: 每10ms产生一帧</span></p><p><span>Idle: 尽可能增加空闲时间</span></p><p><span>Load: 在5s内完成内容家在并可以交互</span></p><p><span>在Performance面板可以看到主线程(Main)的详情，以优化主线程的空闲时间(Idle)</span></p></blockquote><h3><a name="webpagetest" class="md-header-anchor"></a><span>WebPageTest</span></h3><blockquote><p><a href='https://webpagetest.org/'><span>webpagetest</span></a></p><p><span>多测试地点、全面性能报告</span></p></blockquote><p><span>也可以本地安装：</span></p><pre spellcheck="false" class="md-fences md-end-block ty-contain-cm modeLoaded" lang="bash"><div class="CodeMirror cm-s-inner CodeMirror-wrap" lang="bash"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 10.5px; left: 32.09375px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: none;"></textarea></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; margin-bottom: 0px; border-right-width: 0px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div role="presentation" style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code" role="presentation"><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><div class="CodeMirror-gutter-background CodeMirror-activeline-gutter" style="left: 0px; width: 0px;"></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">docker pull webpagetest/server</span></pre></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">docker pull webpagetest/agent</span></pre></div></div></div></div></div><div style="position: absolute; height: 0px; width: 1px; border-bottom-width: 0px; border-bottom-style: solid; border-bottom-color: transparent; top: 42px;"></div><div class="CodeMirror-gutters" style="display: none; height: 42px;"></div></div></div></pre><p><span>测试：</span></p><pre spellcheck="false" class="md-fences md-end-block ty-contain-cm modeLoaded" lang="bash"><div class="CodeMirror cm-s-inner CodeMirror-wrap" lang="bash"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 10.5px; left: 32.09375px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: none;"></textarea></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; margin-bottom: 0px; border-right-width: 0px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div role="presentation" style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code" role="presentation"><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><div class="CodeMirror-gutter-background CodeMirror-activeline-gutter" style="left: 0px; width: 0px;"></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">docker run <span class="cm-attribute">-d</span> <span class="cm-attribute">-p</span> <span class="cm-number">4000</span>:80 webpagetest/server</span></pre></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">docker run <span class="cm-attribute">-d</span> <span class="cm-attribute">-p</span> <span class="cm-number">4001</span>:80 <span class="cm-attribute">--network</span><span class="cm-operator">=</span><span class="cm-string">"host"</span> <span class="cm-attribute">-e</span> <span class="cm-string">"SERVER_URL=http://localhost:4000/work"</span> <span class="cm-attribute">-e</span> <span class="cm-string">"LOCATION=Test"</span> webpagetest/agent</span></pre></div></div></div></div></div><div style="position: absolute; height: 0px; width: 1px; border-bottom-width: 0px; border-bottom-style: solid; border-bottom-color: transparent; top: 84px;"></div><div class="CodeMirror-gutters" style="display: none; height: 84px;"></div></div></div></pre><p><span>本地安装自己查吧</span></p><h3><a name="利用浏览器api" class="md-header-anchor"></a><span>利用浏览器API</span></h3><h4><a name="获取网站的可交互时间" class="md-header-anchor"></a><span>获取网站的可交互时间</span></h4><blockquote><p><span>DNS 解析耗时: domainLookupEnd - domainLookupStart</span>
+<span>TCP 连接耗时: connectEnd - connectStart</span>
+<span>SSL 安全连接耗时: connectEnd - secureConnectionStart</span>
+<span>网络请求耗时 (TTFB): responseStart - requestStart</span>
+<span>数据传输耗时: responseEnd - responseStart</span>
+<span>DOM 解析耗时: domInteractive - responseEnd</span>
+<span>资源加载耗时: loadEventStart - domContentLoadedEventEnd</span>
+<span>First Byte时间: responseStart - domainLookupStart</span>
+<span>白屏时间: responseEnd - fetchStart</span>
+<span>首次可交互时间: domInteractive - fetchStart</span>
+<span>DOM Ready 时间: domContentLoadEventEnd - fetchStart</span>
+<span>页面完全加载时间: loadEventStart - fetchStart</span>
+<span>http 头部大小： transferSize - encodedBodySize</span>
+<span>重定向次数：performance.navigation.redirectCount</span>
+<span>重定向耗时: redirectEnd - redirectStart</span></p></blockquote><pre spellcheck="false" class="md-fences md-end-block ty-contain-cm modeLoaded" lang="js"><div class="CodeMirror cm-s-inner CodeMirror-wrap" lang="js"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 10.5px; left: 32.09375px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: none;"></textarea></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; margin-bottom: 0px; border-right-width: 0px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div role="presentation" style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code" role="presentation" style=""><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><div class="CodeMirror-gutter-background CodeMirror-activeline-gutter" style="left: 0px; width: 0px;"></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-variable">window</span>.<span class="cm-property">addEventListener</span>(<span class="cm-string">'load'</span>, () <span class="cm-operator">=&gt;</span> {</span></pre></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp;<span class="cm-comment">// </span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp;<span class="cm-keyword">let</span> <span class="cm-def">timing</span> <span class="cm-operator">=</span> <span class="cm-variable">performance</span>.<span class="cm-property">getEntriesByType</span>(<span class="cm-string">'navigation'</span>)[<span class="cm-number">0</span>];</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp;<span class="cm-comment">// time to interactive 可交互时间</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp;<span class="cm-keyword">let</span> <span class="cm-def">tti</span> <span class="cm-operator">=</span> <span class="cm-variable-2">timing</span>.<span class="cm-property">domInteractive</span> <span class="cm-operator">-</span> <span class="cm-variable-2">timing</span>.<span class="cm-property">fetchStart</span>;</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">})</span></pre></div></div></div></div></div><div style="position: absolute; height: 0px; width: 1px; border-bottom-width: 0px; border-bottom-style: solid; border-bottom-color: transparent; top: 126px;"></div><div class="CodeMirror-gutters" style="display: none; height: 126px;"></div></div></div></pre><h4><a name="监听长任务耗时长）" class="md-header-anchor"></a><span>监听长任务（耗时长）</span></h4><pre spellcheck="false" class="md-fences md-end-block ty-contain-cm modeLoaded" lang="js"><div class="CodeMirror cm-s-inner CodeMirror-wrap" lang="js"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 10.5px; left: 32.09375px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: none;"></textarea></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; margin-bottom: 0px; border-right-width: 0px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div role="presentation" style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code" role="presentation" style=""><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><div class="CodeMirror-gutter-background CodeMirror-activeline-gutter" style="left: 0px; width: 0px;"></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-comment">// 创建一个监听器</span></span></pre></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-keyword">let</span> <span class="cm-def">observer</span> <span class="cm-operator">=</span> <span class="cm-keyword">new</span> <span class="cm-variable">PerformanceObserver</span>(<span class="cm-def">list</span> <span class="cm-operator">=&gt;</span> {</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp;<span class="cm-keyword">for</span> (<span class="cm-keyword">const</span> <span class="cm-def">entry</span> <span class="cm-keyword">of</span> <span class="cm-variable-2">list</span>.<span class="cm-property">getEntries</span>()) {</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-variable">console</span>.<span class="cm-property">log</span>(<span class="cm-variable-2">entry</span>);</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">  }</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">});</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-variable">observer</span>.<span class="cm-property">observe</span>({</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp;<span class="cm-comment">// 选择监听的类型：long tasks</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp;<span class="cm-property">entryTypes</span>: [<span class="cm-string">'longtask'</span>]</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">});</span></pre></div></div></div></div></div><div style="position: absolute; height: 0px; width: 1px; border-bottom-width: 0px; border-bottom-style: solid; border-bottom-color: transparent; top: 210px;"></div><div class="CodeMirror-gutters" style="display: none; height: 210px;"></div></div></div></pre><p>&nbsp;</p><h4><a name="监听用户是否在当前页面" class="md-header-anchor"></a><span>监听用户是否在当前页面</span></h4><pre spellcheck="false" class="md-fences md-end-block ty-contain-cm modeLoaded" lang="js" style="break-inside: unset;"><div class="CodeMirror cm-s-inner CodeMirror-wrap" lang="js"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 10.5px; left: 32.09375px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: none;"></textarea></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; margin-bottom: 0px; border-right-width: 0px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div role="presentation" style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code" role="presentation" style=""><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><div class="CodeMirror-gutter-background CodeMirror-activeline-gutter" style="left: 0px; width: 0px;"></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-comment">// 页面离开事件在不同的浏览器有不同的实现</span></span></pre></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-keyword">let</span> <span class="cm-def">vEvent</span> <span class="cm-operator">=</span> <span class="cm-string">'visibilitychange'</span>;</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-keyword">if</span> (<span class="cm-variable">document</span>.<span class="cm-property">webkitHidden</span> <span class="cm-operator">!==</span> <span class="cm-atom">undefined</span>) {</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp;<span class="cm-comment">// webkit 事件名称</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp;<span class="cm-variable">vEvent</span> <span class="cm-operator">=</span> <span class="cm-string">'webkitvisibilitychange'</span>;</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">}</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-keyword">function</span> <span class="cm-def">handleVisibilityChange</span>() {</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp;<span class="cm-comment">// 页面不可见</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp;<span class="cm-keyword">if</span> (<span class="cm-variable">document</span>.<span class="cm-property">hidden</span> <span class="cm-operator">||</span> <span class="cm-variable">document</span>.<span class="cm-property">webkitHidden</span>) {</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-variable">console</span>.<span class="cm-property">log</span>(<span class="cm-string">'Web page is hidden'</span>);</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">  } <span class="cm-keyword">else</span> {</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-variable">console</span>.<span class="cm-property">log</span>(<span class="cm-string">'Web page is visible'</span>);</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">  }</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">}</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-variable">document</span>.<span class="cm-property">addEventListener</span>(<span class="cm-variable">vEvent</span>, <span class="cm-variable">handleVisibilityChange</span>, <span class="cm-atom">false</span>);</span></pre></div></div></div></div></div><div style="position: absolute; height: 0px; width: 1px; border-bottom-width: 0px; border-bottom-style: solid; border-bottom-color: transparent; top: 357px;"></div><div class="CodeMirror-gutters" style="display: none; height: 357px;"></div></div></div></pre><h4><a name="获取用户网络状态" class="md-header-anchor"></a><span>获取用户网络状态</span></h4><pre spellcheck="false" class="md-fences md-end-block ty-contain-cm modeLoaded" lang="js"><div class="CodeMirror cm-s-inner CodeMirror-wrap" lang="js"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 10.5px; left: 32.09375px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: none;"></textarea></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; margin-bottom: 0px; border-right-width: 0px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div role="presentation" style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code" role="presentation" style=""><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><div class="CodeMirror-gutter-background CodeMirror-activeline-gutter" style="left: 0px; width: 0px;"></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-keyword">const</span> <span class="cm-def">connection</span> <span class="cm-operator">=</span> <span class="cm-variable">navigator</span>.<span class="cm-property">connection</span> <span class="cm-operator">||</span> <span class="cm-variable">navigator</span>.<span class="cm-property">mozConnection</span> <span class="cm-operator">||</span> <span class="cm-variable">navigator</span>.<span class="cm-property">webkitConnection</span>;</span></pre></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-keyword">function</span> <span class="cm-def">updateConnectionStatus</span>() {</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-tab" role="presentation" cm-text="	">  </span><span class="cm-keyword">const</span> <span class="cm-def">type</span> <span class="cm-operator">=</span> <span class="cm-variable">connection</span>.<span class="cm-property">effectiveType</span>;</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp;<span class="cm-variable">console</span>.<span class="cm-property">log</span>(<span class="cm-string">'Connection type changed to '</span> <span class="cm-operator">+</span> <span class="cm-variable-2">type</span>);</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">}</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-variable">connection</span>.<span class="cm-property">addEventLlistener</span>(<span class="cm-string">'change'</span>, <span class="cm-variable">updateConnectionStatus</span>);</span></pre></div></div></div></div></div><div style="position: absolute; height: 0px; width: 1px; border-bottom-width: 0px; border-bottom-style: solid; border-bottom-color: transparent; top: 147px;"></div><div class="CodeMirror-gutters" style="display: none; height: 147px;"></div></div></div></pre><h2><a name="3-渲染优化" class="md-header-anchor"></a><span>3. 渲染优化</span></h2><h3><a name="浏览器渲染原理和关键渲染路径critical-rendering-path" class="md-header-anchor"></a><span>浏览器渲染原理和关键渲染路径(critical rendering path)</span></h3><blockquote><p><span>关键渲染路径：</span></p><p><span>JavaScript (利用JS/Web animation API等更新页面)</span></p><p><span>-&gt; Style (重新计算样式)</span></p><p><span>-&gt; Layout (布局)</span></p><p><span>-&gt; Paint (绘制)</span></p><p><span>-&gt; Composite (把页面拆分图层进行绘制再进行复合：所以动画最好使用css3 transform)</span></p></blockquote><p><span>对html文件：构建DOM</span></p><p><span>对css文件：构建CSSOM</span></p><p><span>合并为：Render Tree</span></p><h3><a name="回流reflow与重绘repaint" class="md-header-anchor"></a><span>回流(reflow)与重绘(repaint)</span></h3><blockquote><p><span>当Render Tree的一部分需要重新构建，称为</span><strong><span>回流</span></strong><span>。</span></p><p><span>当Render Tree的一部分需要更新外观，而不影响布局，称为</span><strong><span>重绘</span></strong><span>。</span></p></blockquote><h4><a name="影响回流的因素" class="md-header-anchor"></a><span>影响回流的因素</span></h4><p><span>添加/删除元素</span></p><p><span>操作styles</span></p><p><span>display: none</span></p><p><span>offsetLeft, scrollTop, clientWidth</span></p><p><span>移动元素位置</span></p><p><span>修改浏览器大小，字体大小</span></p><h4><a name="避免布局抖动layout-thrashing" class="md-header-anchor"></a><span>避免布局抖动(layout thrashing)</span></h4><blockquote><p><span>通过Performance中，onLoad之后检查layout变化。</span></p><p><span>要消除带有红色标记的Long tasks</span></p></blockquote><h4><a name="减少回流" class="md-header-anchor"></a><span>减少回流</span></h4><p><span>尽可能避免上述情况。</span></p><p><span>如果要进行动画，尽量使用CSS3属性，而不是</span><code>position left</code><span>。</span></p><h3><a name="fastdom" class="md-header-anchor"></a><span>FastDom</span></h3><p><span>借助fastdom使得读（如读取元素offsetTop）写（如修改元素width）分离</span></p><h3><a name="避免重绘" class="md-header-anchor"></a><span>避免重绘</span></h3><blockquote><p><span>在ChromeDevTools搜索</span><code>render</code><span>，找到</span><code>show rendering</code><span>，勾选</span><code>Paint flashing</code></p></blockquote><p><span>总结：多用</span><code>transform</code><span>和</span><code>opacity</code><span>。</span></p><p><span>对于要使用</span><code>transform</code><span>的元素，可以给它们的父盒子加上</span><code>will-change: transform;</code><span>，来告诉浏览器这个盒子要放到一个单独的图层中（最好是动画完毕后去掉这个属性，比如hover时加上，unhover时去掉）。</span></p><p><span>要不要加这个属性，可以多测测。</span></p><h3><a name="life-of-a-frame" class="md-header-anchor"></a><span>Life of a frame</span></h3><blockquote><p><span>Input events</span></p><p><span>JS</span></p><p><span>Begin frame</span></p><p><span>rAF</span></p><p><span>Layout</span></p><p><span>Paint</span></p></blockquote><p><span>比如做一个简单交互动画（卡顿版）</span></p><pre spellcheck="false" class="md-fences md-end-block ty-contain-cm modeLoaded" lang="js"><div class="CodeMirror cm-s-inner CodeMirror-wrap" lang="js"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 10.5px; left: 32.09375px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: none;"></textarea></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; margin-bottom: 0px; border-right-width: 0px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div role="presentation" style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code" role="presentation"><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><div class="CodeMirror-gutter-background CodeMirror-activeline-gutter" style="left: 0px; width: 0px;"></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-variable">window</span>.<span class="cm-property">addEventListener</span>(<span class="cm-string">'pointermove'</span>, <span class="cm-def">e</span> <span class="cm-operator">=&gt;</span> {</span></pre></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp;<span class="cm-keyword">const</span> <span class="cm-def">posX</span> <span class="cm-operator">=</span> <span class="cm-variable-2">e</span>.<span class="cm-property">clientX</span>;</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp;<span class="cm-comment">// 给图片设置宽</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">});</span></pre></div></div></div></div></div><div style="position: absolute; height: 0px; width: 1px; border-bottom-width: 0px; border-bottom-style: solid; border-bottom-color: transparent; top: 84px;"></div><div class="CodeMirror-gutters" style="display: none; height: 84px;"></div></div></div></pre><p><span>升级版</span></p><pre spellcheck="false" class="md-fences md-end-block ty-contain-cm modeLoaded" lang="js"><div class="CodeMirror cm-s-inner CodeMirror-wrap" lang="js"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 10.5px; left: 32.09375px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: none;"></textarea></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; margin-bottom: 0px; border-right-width: 0px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div role="presentation" style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code" role="presentation" style=""><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><div class="CodeMirror-gutter-background CodeMirror-activeline-gutter" style="left: 0px; width: 0px;"></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-keyword">let</span> <span class="cm-def">ticking</span> <span class="cm-operator">=</span> <span class="cm-atom">false</span>;</span></pre></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-variable">window</span>.<span class="cm-property">addEventListener</span>(<span class="cm-string">'pointermove'</span>, <span class="cm-def">e</span> <span class="cm-operator">=&gt;</span> {</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp;<span class="cm-keyword">const</span> <span class="cm-def">posX</span> <span class="cm-operator">=</span> <span class="cm-variable-2">e</span>.<span class="cm-property">clientX</span>;</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp;<span class="cm-keyword">if</span> (<span class="cm-variable">ticking</span>) <span class="cm-keyword">return</span>;</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp;<span class="cm-variable">ticking</span> <span class="cm-operator">=</span> <span class="cm-atom">true</span>;</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp;<span class="cm-variable">window</span>.<span class="cm-property">requestAnimationFrame</span>(() <span class="cm-operator">=&gt;</span> {</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-comment">// 给图片设置宽</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-variable">ticking</span> <span class="cm-operator">=</span> <span class="cm-atom">false</span>;</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">  });</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">});</span></pre></div></div></div></div></div><div style="position: absolute; height: 0px; width: 1px; border-bottom-width: 0px; border-bottom-style: solid; border-bottom-color: transparent; top: 210px;"></div><div class="CodeMirror-gutters" style="display: none; height: 210px;"></div></div></div></pre><h2><a name="4-代码优化" class="md-header-anchor"></a><span>4. 代码优化</span></h2><h3><a name="v8引擎" class="md-header-anchor"></a><span>v8引擎</span></h3><blockquote><p><span>源码 -&gt; 抽象语法树 -&gt; 字节码bytecode -&gt; 机器码</span></p><p><span>编译过程会进行优化。如果优化是错误的，就会进行反优化。</span></p></blockquote><h3><a name="变量" class="md-header-anchor"></a><span>变量</span></h3><p><span>尽量不要修改变量的类型。这样会极大增加v8引擎的反优化过程。</span></p><h3><a name="函数" class="md-header-anchor"></a><span>函数</span></h3><p><span>函数定义都是懒解析的(lazy parsing)的。但是有时候定义完函数就立刻使用，需要让v8引擎对其先懒解析再饥饿解析(eager parsing)。</span></p><p><span>实现方法就是：在函数定义时最外层加上括号，如</span><code>const fun = (() =&gt; {})</code></p><p><span>由于打包时一些打包工具或插件会自动把括号去掉，所以可以使用</span><code>optimize-js</code><span>库。</span></p><h3><a name="html优化" class="md-header-anchor"></a><span>html优化</span></h3><h4><a name="减少iframes使用" class="md-header-anchor"></a><span>减少iframes使用</span></h4><p><span>它有自己的加载过程，还会阻塞父文档的加载。</span></p><p><span>使用优化（延迟加载iframe）：</span></p><pre spellcheck="false" class="md-fences md-end-block ty-contain-cm modeLoaded" lang="html"><div class="CodeMirror cm-s-inner CodeMirror-wrap" lang="html"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 10.5px; left: 32.09375px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: none;"></textarea></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; margin-bottom: 0px; border-right-width: 0px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div role="presentation" style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code" role="presentation" style=""><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><div class="CodeMirror-gutter-background CodeMirror-activeline-gutter" style="left: 0px; width: 0px;"></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-tag cm-bracket">&lt;</span><span class="cm-tag">iframe</span> <span class="cm-attribute">id</span>=<span class="cm-string">"iframe"</span><span class="cm-tag cm-bracket">&gt;&lt;/</span><span class="cm-tag">iframe</span><span class="cm-tag cm-bracket">&gt;</span></span></pre></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-tag cm-bracket">&lt;</span><span class="cm-tag">script</span><span class="cm-tag cm-bracket">&gt;</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp;<span class="cm-comment">// 当页面加载完毕后，再加载iframe</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-tab" role="presentation" cm-text="	">  </span><span class="cm-keyword">function</span> <span class="cm-def">loadIframe</span>() {</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-variable">document</span>.<span class="cm-property">getElementById</span>(<span class="cm-string">'iframe'</span>).<span class="cm-property">setAttribute</span>(<span class="cm-string">'src'</span>, <span class="cm-string">'url'</span>);</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">  }</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-tag cm-bracket">&lt;/</span><span class="cm-tag">script</span><span class="cm-tag cm-bracket">&gt;</span></span></pre></div></div></div></div></div><div style="position: absolute; height: 0px; width: 1px; border-bottom-width: 0px; border-bottom-style: solid; border-bottom-color: transparent; top: 147px;"></div><div class="CodeMirror-gutters" style="display: none; height: 147px;"></div></div></div></pre><h4><a name="压缩空白符和删除注释" class="md-header-anchor"></a><span>压缩空白符和删除注释</span></h4><p><span>使用某些库</span></p><h4><a name="避免节点深层级嵌套" class="md-header-anchor"></a><span>避免节点深层级嵌套</span></h4><p><span>节点少点还是好</span></p><h4><a name="避免table布局" class="md-header-anchor"></a><span>避免table布局</span></h4><p><span>使用不灵活，开销很大</span></p><h4><a name="css和js尽量外链" class="md-header-anchor"></a><span>css和js尽量外链</span></h4><p><span>除非做首屏优化</span></p><h4><a name="删除元素默认属性" class="md-header-anchor"></a><span>删除元素默认属性</span></h4><p><span>默认属性写了跟没写是没有区别的</span></p><h4><a name="借助工具" class="md-header-anchor"></a><span>借助工具</span></h4><p><span>如</span><code>html-minifier</code></p><h3><a name="css" class="md-header-anchor"></a><span>CSS</span></h3><p><code>contain</code><span>属性：</span><a href='https://www.webhek.com/post/css-contain-property.html'><span>介绍</span></a></p><p><code>font-display</code><span>属性：下一小节会介绍</span></p><h2><a name="5-资源优化" class="md-header-anchor"></a><span>5. 资源优化</span></h2><h3><a name="资源压缩" class="md-header-anchor"></a><span>资源压缩</span></h3><p><span>html压缩：html-minifier</span></p><p><span>css压缩：clean-css</span></p><p><span>js压缩和混淆：webpack</span></p><h3><a name="图片优化" class="md-header-anchor"></a><span>图片优化</span></h3><p><span>jpg格式图片的特点：有损压缩，色彩好。压缩工具：imagemin</span></p><p><span>png格式图片的特点：无损，可以做图标。压缩工具：imagemin-pngquant</span></p><p><span>webP</span></p><p><span>svg</span></p><h3><a name="图片加载优化" class="md-header-anchor"></a><span>图片加载优化</span></h3><p><span>原生懒加载：</span><code>&lt;img loading=&quot;lazy&quot;&gt;</code><span>的属性</span></p><p><span>库：</span><code>react-lazy-load-image-component</code><span>, </span><code>verlok/lazyload</code><span>, </span><code>yall.js</code><span>, </span><code>Blazy</code></p><h3><a name="渐进式图片" class="md-header-anchor"></a><span>渐进式图片</span></h3><blockquote><p><span>Baseline JPEG: Loads from top-to-bottom</span></p><p><span>Progressive JPEG: Loads from low-quality to high-quality</span></p></blockquote><p><span>自己制作渐进式图片的工具：</span><code>progressive-image</code><span>, </span><code>ImageMagick</code><span>, </span><code>libjpeg</code><span>, </span><code>jpegtran</code><span>, </span><code>jpeg-recompress</code><span>, </span><code>imagemin</code></p><h3><a name="响应式图片" class="md-header-anchor"></a><span>响应式图片</span></h3><blockquote><p><span>vw是view port width</span></p></blockquote><p><span>使用</span><code>img</code><span>的</span><code>srcset</code><span>属性</span></p><pre spellcheck="false" class="md-fences md-end-block ty-contain-cm modeLoaded" lang="html"><div class="CodeMirror cm-s-inner CodeMirror-wrap" lang="html"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 10.5px; left: 32.09375px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: none;"></textarea></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; margin-bottom: 0px; border-right-width: 0px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div role="presentation" style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code" role="presentation"><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><div class="CodeMirror-gutter-background CodeMirror-activeline-gutter" style="left: 0px; width: 0px;"></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-tag cm-bracket">&lt;</span><span class="cm-tag">img</span> <span class="cm-attribute">src</span>=<span class="cm-string">"p-200.jpg"</span> <span class="cm-attribute">sizes</span>=<span class="cm-string">"100vw"</span> <span class="cm-attribute">srcset</span>=<span class="cm-string">"p-100.jpg 100w, p-200.jpg 200w, p-500.jpg 500w"</span></span></pre></div></div></div></div></div></div><div style="position: absolute; height: 0px; width: 1px; border-bottom-width: 0px; border-bottom-style: solid; border-bottom-color: transparent; top: 42px;"></div><div class="CodeMirror-gutters" style="display: none; height: 42px;"></div></div></div></pre><p><span>还可以使用</span><code>&lt;picture&gt;</code><span>。</span></p><h3><a name="字体问题" class="md-header-anchor"></a><span>字体问题</span></h3><p><code>FOIT</code><span>: flash of invisible text</span></p><p><code>FOUT</code><span>: flash of unstyled text</span></p><h4><a name="使用-font-display-属性" class="md-header-anchor"></a><span>使用 </span><code>font-display</code><span> 属性</span></h4><p><code>auto</code><span>: 自动选择</span></p><p><code>block</code><span>: 3s内不显示文字(FOIT)，3s后如果还未下载完，显示浏览器默认字体(FOUT)，直至下载完毕</span></p><p><code>swap</code><span>: 直接用浏览器默认字体显示，直至下载完毕</span></p><p><code>fallback</code><span>: 100ms内不显示文字，100ms后如果还未下载完，显示浏览器默认字体，直至下载完毕</span></p><p><code>optional</code><span>: 100ms内不显示文字，判断用户网络速度进行选择：使用用户字体 / 浏览器默认字体。这个不会更改了</span></p><p><span>自定义@font-face：略</span></p><h2><a name="6-构建优化" class="md-header-anchor"></a><span>6. 构建优化</span></h2><blockquote><p><span>使用webpack时进行的优化</span></p></blockquote><h3><a name="tree-shaking" class="md-header-anchor"></a><span>Tree-shaking</span></h3><p><span>条件：上下文未用到的代码(dead code)，且是以ES6语法导出导入的语法</span></p><p><span>可以在</span><code>package.json</code><span>中设置</span><code>sideEffects</code><span>属性，来使得</span><code>webpack</code><span>的</span><code>terserPlugin</code><span>在做压缩工作使用</span><code>tree shaking</code><span>时，过滤掉一些指定类型的文件。如</span></p><pre spellcheck="false" class="md-fences md-end-block ty-contain-cm modeLoaded" lang="js"><div class="CodeMirror cm-s-inner CodeMirror-wrap" lang="js"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 10.5px; left: 32.09375px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: none;"></textarea></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; margin-bottom: 0px; border-right-width: 0px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div role="presentation" style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code" role="presentation"><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><div class="CodeMirror-gutter-background CodeMirror-activeline-gutter" style="left: 0px; width: 0px;"></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-string">"sideEffects"</span>: [</span></pre></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp;<span class="cm-string">"*.css"</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">]</span></pre></div></div></div></div></div><div style="position: absolute; height: 0px; width: 1px; border-bottom-width: 0px; border-bottom-style: solid; border-bottom-color: transparent; top: 63px;"></div><div class="CodeMirror-gutters" style="display: none; height: 63px;"></div></div></div></pre><h3><a name="优化打包速度" class="md-header-anchor"></a><span>优化打包速度</span></h3><h4><a name="noparse" class="md-header-anchor"></a><span>noParse</span></h4><p><span>通知webpack忽略较大的库，如</span><code>lodash</code></p><h4><a name="dllplugin" class="md-header-anchor"></a><span>dllPlugin</span></h4><p><span>极大提高打包速度。一般在开发时使用</span></p><h3><a name="code-splitting" class="md-header-anchor"></a><span>Code splitting</span></h3><blockquote><p><span>代码拆分，以达到首屏加载优化的效果</span></p></blockquote><p><span>在webpack.config.js中：</span></p><pre spellcheck="false" class="md-fences md-end-block ty-contain-cm modeLoaded" lang="js" style="break-inside: unset;"><div class="CodeMirror cm-s-inner CodeMirror-wrap" lang="js"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 10.5px; left: 32.09375px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: none;"></textarea></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; margin-bottom: 0px; border-right-width: 0px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div role="presentation" style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code" role="presentation" style=""><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><div class="CodeMirror-gutter-background CodeMirror-activeline-gutter" style="left: 0px; width: 0px;"></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">{</span></pre></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp;<span class="cm-variable">output</span>: {</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-variable">path</span>: <span class="cm-string-2">`${</span><span class="cm-variable">__dirname</span><span class="cm-string-2">}/build`</span>,</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-variable">filename</span>: <span class="cm-string">'[name].[hash].bundle.js'</span>,</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-comment">// 8位的hash。其实默认长度(20)就ok</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-variable">chunkFilename</span>: <span class="cm-string">'[name].[chunkhash:8].bundle.js'</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">  },</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp;<span class="cm-comment">// 代码拆分的文件</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-tab" role="presentation" cm-text="	">  </span><span class="cm-variable">optimization</span>: {</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-variable">splitChunks</span>: {</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp;<span class="cm-variable">cacheGroups</span>: {</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-comment">// vendor通常用来指第三方库</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">vendor</span>: {</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">name</span>: <span class="cm-string">'vendor'</span>,</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">test</span>: <span class="cm-string-2">/[\\/]node_modules[\\/]/</span>,</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-comment">// 最小的大小</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">minSize</span>: <span class="cm-number">0</span>,</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-comment">// 最小的段数</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">minChunks</span>: <span class="cm-number">1</span>,</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-comment">// 优先级</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">priority</span>: <span class="cm-number">10</span>,</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-comment">// 这个字段表示支持的引入方式：initial支持静态引入，async支持动态引入，all支持两种</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">chunks</span>: <span class="cm-string">'initial'</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp;  },</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">common</span>: {</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">name</span>: <span class="cm-string">'common'</span>,</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">test</span>: <span class="cm-string-2">/[\\/]src[\\/]/</span>,</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">chunks</span>: <span class="cm-string">'all'</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp;  }</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;  }</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp;  }</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">  },</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp;<span class="cm-variable">plugins</span>: [</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-comment">// css提取插件</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-keyword">new</span> <span class="cm-variable">MiniCssExtractPlugin</span>({</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp;<span class="cm-property">filename</span>: <span class="cm-string">'[name].[contenthash].css'</span>,</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp;<span class="cm-property">chunkFilename</span>: <span class="cm-string">'[id].[contenthash:8].css'</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp;  })</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">  ]</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">}</span></pre></div></div></div></div></div><div style="position: absolute; height: 0px; width: 1px; border-bottom-width: 0px; border-bottom-style: solid; border-bottom-color: transparent; top: 861px;"></div><div class="CodeMirror-gutters" style="display: none; height: 861px;"></div></div></div></pre><p><span>在React项目中，可以用Suspense和lazy实现动态引入</span></p><h3><a name="基于webpack的文件压缩minification" class="md-header-anchor"></a><span>基于webpack的文件压缩(Minification)</span></h3><p><span>Terser: JS</span>
+<span>mini-css-extract-plugin: CSS（从js中提取css）</span></p><p><span>HtmlWebpackPlugin</span></p><h3><a name="webpack检测和分析工具" class="md-header-anchor"></a><span>webpack检测和分析工具</span></h3><h4><a name="webpack-chart" class="md-header-anchor"></a><span>webpack-chart</span></h4><blockquote><p><a href='https://alexkuz.github.io/webpack-chart/'><span>webpack-chart</span></a></p></blockquote><p><span>生成项目的</span><code>stats.json</code><span>文件，上传到网址就好了</span></p><h4><a name="source-map-explorer" class="md-header-anchor"></a><span>source-map-explorer</span></h4><blockquote><p><span>它是一个npm库，可以直接安装</span></p><p><span>它基于项目的source-map文件，所以打包时需要生成source-map文件</span></p></blockquote><h4><a name="webpack-bundle-analyzer" class="md-header-anchor"></a><span>webpack-bundle-analyzer</span></h4><p><span>webpack的插件。没有上一个看的清晰</span></p><h4><a name="speed-measure-webpack-plugin" class="md-header-anchor"></a><span>speed-measure-webpack-plugin</span></h4><blockquote><p><span>测量速度的插件</span></p></blockquote><h3><a name="react按需加载" class="md-header-anchor"></a><span>React按需加载</span></h3><blockquote><p><span>粒度来说，通常按照路由来进行组件的按需加载</span></p></blockquote><p><span>除了使用</span><code>React.Suspense</code><span>和</span><code>React.lazy</code><span>，还可以使用库</span><code>@loadable/component</code><span>，就是</span><code>react-router</code><span>的按需加载库。</span></p><h2><a name="7-传输加载优化" class="md-header-anchor"></a><span>7. 传输加载优化</span></h2><h3><a name="gzip" class="md-header-anchor"></a><span>Gzip</span></h3><p><span>这里使用nginx</span></p><pre spellcheck="false" class="md-fences md-end-block ty-contain-cm modeLoaded" lang="bash"><div class="CodeMirror cm-s-inner CodeMirror-wrap" lang="bash"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 10.5px; left: 32.09375px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: none;"></textarea></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; margin-bottom: 0px; border-right-width: 0px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div role="presentation" style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code" role="presentation"><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><div class="CodeMirror-gutter-background CodeMirror-activeline-gutter" style="left: 0px; width: 0px;"></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">brew install nginx</span></pre></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">brew services <span class="cm-builtin">start</span> nginx</span></pre></div></div></div></div></div><div style="position: absolute; height: 0px; width: 1px; border-bottom-width: 0px; border-bottom-style: solid; border-bottom-color: transparent; top: 42px;"></div><div class="CodeMirror-gutters" style="display: none; height: 42px;"></div></div></div></pre><p><span>配置</span></p><pre spellcheck="false" class="md-fences md-end-block ty-contain-cm modeLoaded" lang="nginx" style="break-inside: unset;"><div class="CodeMirror cm-s-inner CodeMirror-wrap" lang="nginx"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 10.5px; left: 32.09375px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: none;"></textarea></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; margin-bottom: 0px; border-right-width: 0px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div role="presentation" style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code" role="presentation" style=""><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><div class="CodeMirror-gutter-background CodeMirror-activeline-gutter" style="left: 0px; width: 0px;"></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-keyword">gzip</span> on;</span></pre></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-comment"># 当文件达到1k时才压缩</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-keyword">gzip_min_length</span> 1k;</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-comment"># 文件压缩等级</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-keyword">gzip_comp_level</span> 6;</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-comment"># 压缩的文件类型</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-keyword">gzip_types</span> text/<span class="cm-tag">plain application</span>/<span class="cm-tag">javascript application</span>/<span class="cm-tag">x-javascript</span> text/<span class="cm-tag">css application</span>/<span class="cm-tag">xml text</span>/<span class="cm-tag">xml text</span>/<span class="cm-tag">javascript application</span>/json;</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-comment">#</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-keyword">gzip_static</span> on;</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-keyword">gzip_vary</span> on;</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-keyword">gzip_buffers</span> <span class="cm-tag">4 16k</span>;</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-keyword">gzip_http_version</span> 1.1;</span></pre></div></div></div></div></div><div style="position: absolute; height: 0px; width: 1px; border-bottom-width: 0px; border-bottom-style: solid; border-bottom-color: transparent; top: 336px;"></div><div class="CodeMirror-gutters" style="display: none; height: 336px;"></div></div></div></pre><h3><a name="keep-alive" class="md-header-anchor"></a><span>Keep Alive</span></h3><blockquote><p><span>它对应的是</span><code>Network</code><span>的</span><code>Initial connection</code><span>(HTTP连接)。开启之后，只有第一个请求会有这个时间的消耗。</span></p></blockquote><p><span>这个选项在HTTP1.1是默认开启的。</span></p><p><span>对</span><code>nginx</code><span>进行keep-alive相关参数配置</span></p><pre spellcheck="false" class="md-fences md-end-block ty-contain-cm modeLoaded" lang="nginx"><div class="CodeMirror cm-s-inner CodeMirror-wrap" lang="nginx"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 10.5px; left: 32.09375px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: none;"></textarea></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; margin-bottom: 0px; border-right-width: 0px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div role="presentation" style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code" role="presentation" style=""><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><div class="CodeMirror-gutter-background CodeMirror-activeline-gutter" style="left: 0px; width: 0px;"></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-comment"># 延时为65s</span></span></pre></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-keyword">keepalive_timeout</span> 65;</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-comment"># 一次最多可以发送100个请求</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-keyword">keepalive_requests</span> 100;</span></pre></div></div></div></div></div><div style="position: absolute; height: 0px; width: 1px; border-bottom-width: 0px; border-bottom-style: solid; border-bottom-color: transparent; top: 105px;"></div><div class="CodeMirror-gutters" style="display: none; height: 105px;"></div></div></div></pre><h3><a name="nginx做缓存" class="md-header-anchor"></a><span>nginx做缓存</span></h3><pre spellcheck="false" class="md-fences md-end-block ty-contain-cm modeLoaded" lang="nginx" style="break-inside: unset;"><div class="CodeMirror cm-s-inner CodeMirror-wrap" lang="nginx"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 10.5px; left: 32.09375px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: none;"></textarea></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; margin-bottom: 0px; border-right-width: 0px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div role="presentation" style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code" role="presentation" style=""><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><div class="CodeMirror-gutter-background CodeMirror-activeline-gutter" style="left: 0px; width: 0px;"></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-variable-2">if</span> <span class="cm-tag">($request_filename ~</span>* .*<span class="cm-tag">\</span>.<span class="cm-tag">(?</span>:<span class="cm-tag">htm|html)$)</span></span></pre></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">{</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp;<span class="cm-comment"># 禁止浏览器缓存(http1.1)</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp;<span class="cm-keyword">add_header</span> <span class="cm-number">Cache-Control</span> <span class="cm-string">"no-cache, must-revalidate"</span>;</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp;<span class="cm-comment"># 兼容低版本http1.0</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp;<span class="cm-comment"># 禁止缓存</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp;<span class="cm-keyword">add_header</span> <span class="cm-string">"Pragma"</span> <span class="cm-string">"no-cache"</span>;</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp;<span class="cm-comment"># 立即过期</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp;<span class="cm-keyword">add_header</span> <span class="cm-string">"Expires"</span> <span class="cm-string">"0"</span>;</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">}</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-variable-2">if</span> <span class="cm-tag">($request_filename ~</span>* .*<span class="cm-tag">\</span>.<span class="cm-tag">(?</span>:<span class="cm-tag">js|css)$)</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">{</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp;<span class="cm-keyword">expires</span> 7d;</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">}</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-variable-2">if</span> <span class="cm-tag">($request_filename ~</span>* .*<span class="cm-tag">\</span>.<span class="cm-tag">(?</span>:<span class="cm-tag">jpg|jpeg|gif|png|ico|cur|gz|svg|svgz|mp4|ogg|ogv|webm)$)</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">{</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp;<span class="cm-keyword">expires</span> 7d;</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">}</span></pre></div></div></div></div></div><div style="position: absolute; height: 0px; width: 1px; border-bottom-width: 0px; border-bottom-style: solid; border-bottom-color: transparent; top: 399px;"></div><div class="CodeMirror-gutters" style="display: none; height: 399px;"></div></div></div></pre><p><code>Etag</code><span>+</span><code>If-None-Match</code><span>在nginx是默认开启的。</span></p><p><code>cache-control: max-age=0</code><span>：禁止缓存</span></p><p><code>cache-control: private, no-store</code><span>: private是禁止二级缓存(只有用户浏览器可以缓存)；no-store是禁用任何形式的缓存，所以</span><code>etag</code><span>会失效，一定会从服务器拉取最新的内容</span></p><h3><a name="service-worker" class="md-header-anchor"></a><span>Service Worker</span></h3><blockquote><p><span>可以为网页提供离线访问功能。</span></p><p><span>只能在localhost或https下访问。</span></p></blockquote><p><span>在webpack中使用：</span><code>workbox-webpack-plugin</code><span>和</span><code>manifest-plugin</code></p><h4><a name="http2" class="md-header-anchor"></a><span>http2</span></h4><p><span>略</span></p><h2><a name="8-优化方案" class="md-header-anchor"></a><span>8. 优化方案</span></h2><h3><a name="flex布局" class="md-header-anchor"></a><span>flex布局</span></h3><p><span>给子元素加</span><code>float: left</code><span>效率比较低，替代方案为：</span></p><p><span>给父元素加</span></p><pre spellcheck="false" class="md-fences md-end-block ty-contain-cm modeLoaded" lang="css"><div class="CodeMirror cm-s-inner CodeMirror-wrap" lang="css"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 10.5px; left: 32.09375px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: none;"></textarea></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; margin-bottom: 0px; border-right-width: 0px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div role="presentation" style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code" role="presentation"><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><div class="CodeMirror-gutter-background CodeMirror-activeline-gutter" style="left: 0px; width: 0px;"></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-tag">display</span>: <span class="cm-variable-3">flex</span>;</span></pre></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-tag">flex-flow</span>: <span class="cm-variable-3">row</span> <span class="cm-tag">wrap</span>;</span></pre></div></div></div></div></div><div style="position: absolute; height: 0px; width: 1px; border-bottom-width: 0px; border-bottom-style: solid; border-bottom-color: transparent; top: 42px;"></div><div class="CodeMirror-gutters" style="display: none; height: 42px;"></div></div></div></pre><h3><a name="优化资源加载顺序" class="md-header-anchor"></a><span>优化资源加载顺序</span></h3><p><span>preload：指定当前页面优先加载的资源</span></p><blockquote><p><span>preload后，资源在Network显示的优先级仍是</span><code>low</code></p><p><span>preload字体时，必须要设置crossorigin=&quot;anonymous&quot;</span></p></blockquote><pre spellcheck="false" class="md-fences md-end-block ty-contain-cm modeLoaded" lang="html"><div class="CodeMirror cm-s-inner CodeMirror-wrap" lang="html"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 10.5px; left: 32.09375px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: none;"></textarea></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; margin-bottom: 0px; border-right-width: 0px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div role="presentation" style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code" role="presentation"><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><div class="CodeMirror-gutter-background CodeMirror-activeline-gutter" style="left: 0px; width: 0px;"></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-tag cm-bracket">&lt;</span><span class="cm-tag">head</span><span class="cm-tag cm-bracket">&gt;</span></span></pre></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp;<span class="cm-tag cm-bracket">&lt;</span><span class="cm-tag">link</span> <span class="cm-attribute">rel</span>=<span class="cm-string">"preload"</span> <span class="cm-attribute">href</span>=<span class="cm-string">"img/product.svg"</span> <span class="cm-attribute">as</span>=<span class="cm-string">"image"</span><span class="cm-tag cm-bracket">&gt;</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-tag cm-bracket">&lt;/</span><span class="cm-tag">head</span><span class="cm-tag cm-bracket">&gt;</span></span></pre></div></div></div></div></div><div style="position: absolute; height: 0px; width: 1px; border-bottom-width: 0px; border-bottom-style: solid; border-bottom-color: transparent; top: 63px;"></div><div class="CodeMirror-gutters" style="display: none; height: 63px;"></div></div></div></pre><p><span>prefetch</span></p><blockquote><p><span>页面所有事干完后，prefetch一个资源。它用来提前拉取下一个页面用的资源的</span></p></blockquote><pre spellcheck="false" class="md-fences md-end-block ty-contain-cm modeLoaded" lang="html"><div class="CodeMirror cm-s-inner CodeMirror-wrap" lang="html"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 10.5px; left: 32.09375px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: none;"></textarea></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; margin-bottom: 0px; border-right-width: 0px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div role="presentation" style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code" role="presentation"><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><div class="CodeMirror-gutter-background CodeMirror-activeline-gutter" style="left: 0px; width: 0px;"></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-tag cm-bracket">&lt;</span><span class="cm-tag">head</span><span class="cm-tag cm-bracket">&gt;</span></span></pre></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp;<span class="cm-tag cm-bracket">&lt;</span><span class="cm-tag">link</span> <span class="cm-attribute">rel</span>=<span class="cm-string">"prefetch"</span><span class="cm-tag cm-bracket">&gt;</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-tag cm-bracket">&lt;/</span><span class="cm-tag">head</span><span class="cm-tag cm-bracket">&gt;</span></span></pre></div></div></div></div></div><div style="position: absolute; height: 0px; width: 1px; border-bottom-width: 0px; border-bottom-style: solid; border-bottom-color: transparent; top: 63px;"></div><div class="CodeMirror-gutters" style="display: none; height: 63px;"></div></div></div></pre><p><span>webpack也有相应的配置。</span></p><h3><a name="预渲染" class="md-header-anchor"></a><span>预渲染</span></h3><p><code>react-snap</code><span>开箱即用</span></p><h3><a name="窗口化windowing提高列表性能" class="md-header-anchor"></a><span>窗口化(Windowing)提高列表性能</span></h3><p><code>react-window</code><span>可以实现windowing</span></p><blockquote><p><strong><span>只渲染可见的行</span></strong><span>，渲染和滚动的性能都会提升。它包括 </span><strong><span>lazy loading 和 主动释放</span></strong><span> 的两个过程。</span></p></blockquote><p><code>react-window</code><span>可以实现二维的windowing，即横向和纵向都滚动。</span></p><h3><a name="使用骨架组件skeleton减少布局移动" class="md-header-anchor"></a><span>使用骨架组件(skeleton)减少布局移动</span></h3><p><span>使用</span><code>react-placeholder</code><span>库</span></p><p><span>注意：在</span><code>Chrome DevTools</code><span>可以打开</span><code>Layout Shift Regions</code><span>，来查看布局变化。</span></p><h2><a name="9-其他" class="md-header-anchor"></a><span>9. 其他</span></h2><h3><a name="首屏优化" class="md-header-anchor"></a><span>首屏优化</span></h3><p><span>什么是首屏？above the fold，报纸折叠的上面部分。</span></p><p><strong><span>首屏优化的几个名词：</span></strong></p><p><span>First Contentful Paint(FCP)</span></p><p><span>Largest Contentful Paint(LCP)</span></p><p><span>Time to Interactive(TTI)</span></p><p><strong><span>解决方案：</span></strong></p><p><span>资源压缩：html, css, js, img等</span></p><p><span>传输压缩：gzip</span></p><p><span>代码拆分：按照路由分出更多的js包，包括第三方库和自己写的懒加载组件</span></p><p><span>tree shaking：去掉无用代码</span></p><p><span>缓存：加速访问</span></p><p><strong><span>若首页内容太多：</span></strong></p><p><span>对组件或内容懒加载，或者预渲染，inline-css</span></p><h3><a name="垃圾回收garbage-collection" class="md-header-anchor"></a><span>垃圾回收(garbage collection)</span></h3><p><span>局部变量：函数执行完毕时，如果没有闭包引用，则会被释放</span></p><p><span>全局变量：直至浏览器卸载页面才会释放</span></p><p><span>垃圾回收的两种方式：引用计数（可能会有循环引用的问题）；标记清除（现代浏览器基本都用这个方法）</span></p><p>&nbsp;</p></div>
+</body>
+</html>
